@@ -1,0 +1,31 @@
+.main
+{
+  background-color: rgb(100%, 100%, 100%);
+  color: rgb(0%, 0%, 0%);
+  font-family: lucida grande, tahoma, verdana, arial, helvetica, sans-serif;
+  font-size: 12px;
+}
+
+.link
+{
+  color: rgb(0%, 0%, 80%);
+  text-decoration: none;
+}
+
+.link:focus,
+.link:hover
+{
+  text-decoration: underline;
+  outline-style: none;
+}
+
+.overflow
+{
+  overflow: auto;
+}
+
+.world_canvas
+{
+  float: left;
+  padding-right: 12px;
+}

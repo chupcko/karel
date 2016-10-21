@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Karel</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="css/tab.css"/>
+    <link rel="stylesheet" type="text/css" href="css/status.css"/>
+    <link rel="stylesheet" type="text/css" href="css/settings_view.css"/>
+    <link rel="stylesheet" type="text/css" href="css/machine_view.css"/>
+    <link rel="stylesheet" type="text/css" href="css/world_view.css"/>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <style type="text/css">
+      /*<![CDATA[*/
+      /*]]>*/
+    </style>
+    <script src="js/tab.js"></script>
+    <script src="js/status.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/machine.js"></script>
+    <script src="js/compiler.js"></script>
+    <script src="js/world.js"></script>
+    <script src="js/settings_view.js"></script>
+    <script src="js/machine_view.js"></script>
+    <script src="js/world_view.js"></script>
+    <script src="js/runner.js"></script>
+    <script src="js/main.js"></script>
+    <script type="text/javascript">
+      /*<![CDATA[*/
+      /*]]>*/
+    </script>
+  </head>
+  <body class="main" onload="main();">
+    <ul class="tab">
+      <li><a href="javascript:tabNothing();" class="tab_link tab_active" onclick="tabOpen(event, 'tab_about');">About</a></li>
+      <li><a href="javascript:tabNothing();" class="tab_link" onclick="tabOpen(event, 'tab_settings');">Settings</a></li>
+      <li><a href="javascript:tabNothing();" class="tab_link" onclick="tabOpen(event, 'tab_program');">Program</a></li>
+      <li><a href="javascript:tabNothing();" class="tab_link" onclick="tabOpen(event, 'tab_world');">World</a></li>
+      <li><a href="javascript:tabNothing();" class="tab_link" onclick="tabOpen(event, 'tab_machine');">Machine</a></li>
+      <li class="tab_right"><a href="javascript:tabNothing();" class="tab_link" onclick="step();">Step</a></li>
+      <li class="tab_right"><a href="javascript:tabNothing();" class="tab_link" onclick="runStop();">Run/Stop</a></li>
+      <li class="tab_right"><a href="javascript:tabNothing();" class="tab_link" onclick="reset();">Reset</a></li>
+    </ul>
+    <div id="status" class="status"></div>
+    <div id="tab_about" class="tab_content tab_content_show">
+      C variant of <a href="https://en.wikipedia.org/wiki/Karel_(programming_language)" class="link">Karel programming language</a><br/>
+      by Goran "<a href="http://www.chupcko.org/" class="link">CHUPCKO</a>" Lazi&#x0107;<br/>
+      <br/>
+      Version: <b>0.1</b> 2016-09-26
+    </div>
+    <div id="tab_settings" class="tab_content"></div>
+    <div id="tab_program" class="tab_content">
+      <button type="button" onclick="compile();">Compile</button><br/>
+      <textarea rows="40" cols="120" id="program">
+main()
+{
+  while(!wall)
+  {
+    while(find)
+      take;
+    move;
+  }
+  while(find)
+    take;
+}
+</textarea>
+    </div>
+    <div id="tab_world" class="tab_content overflow">
+      <div class="world_canvas"><canvas id="world_canvas"></canvas></div>
+      <div id="world_controller"></div>
+    </div>
+    <div id="tab_machine" class="tab_content"></div>
+  </body>
+</html>

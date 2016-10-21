@@ -1,0 +1,38 @@
+<program>   ::= name left_parentheses right_parentheses <block> <program>
+              |
+              .
+
+<block>     ::= left_braces <list> right_braces
+              .
+
+<list>      ::= <statment> <list>
+              |
+              .
+
+<statment>  ::= <primitive> semicolon
+              | if left_parentheses <condition> right_parentheses <statment> <else>
+              | while left_parentheses <condition> right_parentheses <statment>
+              | repeat left_parentheses number right_parentheses <statment>
+              | <block>
+              .
+
+<primitive> ::= left
+              | move
+              | put
+              | take
+              | return
+              | stop
+              | name left_parentheses right_parentheses
+              |
+              .
+
+<condition> ::= exclamation_mark <condition>
+              | find
+              | have
+              | north
+              | wall
+              .
+
+<else>      ::= else <statment>
+              |
+              .

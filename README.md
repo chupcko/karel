@@ -1,2 +1,0 @@
-# karel
-karel.chupcko.org

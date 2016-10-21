@@ -1,0 +1,36 @@
+.machine_view_overflow
+{
+  overflow: auto;
+}
+
+.machine_view_code
+{
+  float: left;
+  padding-right: 12px;
+}
+
+.machine_view_code_table
+{
+  border-collapse: collapse;
+}
+
+.machine_view_code_address_cell
+{
+  text-align: right;
+}
+
+.machine_view_code_code_cell
+{
+  width: 3em;
+}
+
+.machine_view_code_pc_row
+{
+  background-color: rgb(80%, 80%, 80%);
+  font-weight: bold;
+}
+
+.machine_view_data
+{
+  font-weight: bold;
+}
