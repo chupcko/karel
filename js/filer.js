@@ -9,7 +9,16 @@ function FilerClass(status, programID, world, machine, worldView, machineView)
 
   this.load = function(text)
   {
-    var data = JSON.parse(text);
+    var data;
+    try
+    {
+      data = JSON.parse(text);
+    }
+    catch(error)
+    {
+      status.setError('Bad file format');
+      return;
+    }
     if(data.hasOwnProperty('program') === false)
     {
       status.setError('Bad file format: missing program');

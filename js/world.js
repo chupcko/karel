@@ -465,9 +465,19 @@ function WorldClass(maxX, maxY)
       this.reset();
       return;
     }
-    this.beepersNumber = this.loadedData.beepersNumber;
+/*    this.beepersNumber = this.loadedData.beepersNumber;
     this.wallsNorthSouth = this.loadedData.wallsNorthSouth;
     this.wallsEastWest = this.loadedData.wallsEastWest;
+*/
+    this.beepersNumber = new Array();
+    for(var x = 0; x < this.maxX; x++)
+      this.beepersNumber[x] = this.loadedData.beepersNumber[x].slice();
+    this.wallsNorthSouth = new Array();
+    for(var x = 0; x < this.maxX; x++)
+      this.wallsNorthSouth[x] = this.loadedData.wallsNorthSouth[x].slice();
+    this.wallsEastWest = new Array();
+    for(var x = 0; x < this.maxX-1; x++)
+      this.wallsEastWest[x] = this.loadedData.wallsEastWest[x].slice();
     this.karelX = this.loadedData.karelX;
     this.karelY = this.loadedData.karelY;
     this.karelDirection = this.loadedData.karelDirection;

@@ -1,1 +1,5 @@
+-functionsTable change with array in compiler
+-On load or get, fill file_name
+-Add called procedure in machine view
+-Add loop, break
 -Need examples
