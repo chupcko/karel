@@ -11,7 +11,7 @@ function WorldClass(maxX, maxY)
   this.karelDirection = undefined;
   this.karelBeepersNumber = undefined;
 
-  this.loadedData = undefined;
+  this.copiedData = undefined;
 
   this.DirectionNorth = 0;
   this.DirectionWest  = 1;
@@ -458,30 +458,26 @@ function WorldClass(maxX, maxY)
     return true;
   };
 
-  this.loadData = function()
+  this.loadCopiedData = function()
   {
-    if(this.loadedData === undefined)
+    if(this.copiedData === undefined)
     {
       this.reset();
       return;
     }
-/*    this.beepersNumber = this.loadedData.beepersNumber;
-    this.wallsNorthSouth = this.loadedData.wallsNorthSouth;
-    this.wallsEastWest = this.loadedData.wallsEastWest;
-*/
     this.beepersNumber = new Array();
     for(var x = 0; x < this.maxX; x++)
-      this.beepersNumber[x] = this.loadedData.beepersNumber[x].slice();
+      this.beepersNumber[x] = this.copiedData.beepersNumber[x].slice();
     this.wallsNorthSouth = new Array();
     for(var x = 0; x < this.maxX; x++)
-      this.wallsNorthSouth[x] = this.loadedData.wallsNorthSouth[x].slice();
+      this.wallsNorthSouth[x] = this.copiedData.wallsNorthSouth[x].slice();
     this.wallsEastWest = new Array();
     for(var x = 0; x < this.maxX-1; x++)
-      this.wallsEastWest[x] = this.loadedData.wallsEastWest[x].slice();
-    this.karelX = this.loadedData.karelX;
-    this.karelY = this.loadedData.karelY;
-    this.karelDirection = this.loadedData.karelDirection;
-    this.karelBeepersNumber = this.loadedData.karelBeepersNumber;
+      this.wallsEastWest[x] = this.copiedData.wallsEastWest[x].slice();
+    this.karelX = this.copiedData.karelX;
+    this.karelY = this.copiedData.karelY;
+    this.karelDirection = this.copiedData.karelDirection;
+    this.karelBeepersNumber = this.copiedData.karelBeepersNumber;
   };
 
   this.load = function(data)
@@ -568,22 +564,33 @@ function WorldClass(maxX, maxY)
     if(data.karelBeepersNumber < 0)
       return 'bad karelBeepersNumber value';
 
-    this.loadedData = data;
-    this.loadData();
+    this.copiedData = data;
+    this.loadCopiedData();
     return true;
   };
 
   this.save = function()
   {
-    return {
-      'beepersNumber':      this.beepersNumber,
-      'wallsNorthSouth':    this.wallsNorthSouth,
-      'wallsEastWest':      this.wallsEastWest,
+    this.copiedData =
+    {
+      'beepersNumber':      undefined,
+      'wallsNorthSouth':    undefined,
+      'wallsEastWest':      undefined,
       'karelX':             this.karelX,
       'karelY':             this.karelY,
       'karelDirection':     this.karelDirection,
       'karelBeepersNumber': this.karelBeepersNumber
     };
+    this.copiedData.beepersNumber = new Array();
+    for(var x = 0; x < this.maxX; x++)
+      this.copiedData.beepersNumber[x] = this.beepersNumber[x].slice();
+    this.copiedData.wallsNorthSouth = new Array();
+    for(var x = 0; x < this.maxX; x++)
+      this.copiedData.wallsNorthSouth[x] = this.wallsNorthSouth[x].slice();
+    this.copiedData.wallsEastWest = new Array();
+    for(var x = 0; x < this.maxX-1; x++)
+      this.copiedData.wallsEastWest[x] = this.wallsEastWest[x].slice();
+    return this.copiedData;
   };
 
   this.reset();

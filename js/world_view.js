@@ -653,7 +653,7 @@ function WorldViewClass(status, world, controllerID, canvasID)
 
   this.reloadWorld = function()
   {
-    this.world.loadData();
+    this.world.loadCopiedData();
     this.draw();
   };
 

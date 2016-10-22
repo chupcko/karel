@@ -1,5 +1,5 @@
--functionsTable change with array in compiler
--On load or get, fill file_name
+-sirina u machine_view
+-functionsTable change with array in compiler (look at machine, also)
 -Add called procedure in machine view
 -Add loop, break
--Need examples
+-Add examples

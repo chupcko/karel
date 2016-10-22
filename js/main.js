@@ -91,6 +91,7 @@ function load()
     Filer.load(reader.result);
   };
   reader.readAsText(files[0]);
+  document.getElementById('file_name').value = files[0].name;
 }
 
 function save()
@@ -127,6 +128,7 @@ function get(name)
   };
   xhttp.open('GET', 'examples/'+name, true);
   xhttp.send();
+  document.getElementById('file_name').value = name;
 }
 
 function compile()
