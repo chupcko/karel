@@ -34,7 +34,11 @@ ul.tab li a
   text-decoration: none;
 }
 
-ul.tab li a:focus,
+ul.tab li a:focus
+{
+  outline-style: none;
+}
+
 ul.tab li a:hover
 {
   background-color: hsl(210, 100%, 75%);

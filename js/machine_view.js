@@ -1,14 +1,14 @@
 function MachineViewClass(machine, containerID)
 {
   this.machine = machine;
-  this.containerID = document.getElementById(containerID);
+  this.container = document.getElementById(containerID);
   this.oldPC = undefined;
 
   this.init = function()
   {
     if(this.machine.code === undefined)
     {
-      this.containerID.innerHTML = 'Not yet compiled';
+      this.container.innerHTML = 'Not yet compiled';
       return;
     }
     var text =
@@ -39,7 +39,7 @@ function MachineViewClass(machine, containerID)
       '<br/>'+
       'Stack:<div id="'+this.$name()+'_stack" class="machine_view_stack"></div>'+
       '</div></div>';
-    this.containerID.innerHTML = text;
+    this.container.innerHTML = text;
     this.oldPC = undefined;
   };
 

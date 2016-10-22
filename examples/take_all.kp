@@ -1,0 +1,25 @@
+go_home()
+{
+  while(!north)
+    left;
+  repeat(2)
+  {
+    left;
+    while(!wall)
+      move;
+  }
+  left;
+  left;
+}
+
+take_all()
+{
+  #
+}
+
+main()
+{
+  go_home();
+  take_all();
+  go_home();
+}

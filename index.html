@@ -23,6 +23,7 @@
     <script src="js/settings_view.js"></script>
     <script src="js/machine_view.js"></script>
     <script src="js/world_view.js"></script>
+    <script src="js/filer.js"></script>
     <script src="js/runner.js"></script>
     <script src="js/main.js"></script>
     <script type="text/javascript">
@@ -34,6 +35,7 @@
     <ul class="tab">
       <li><a href="javascript:tabNothing();" class="tab_link tab_active" onclick="tabOpen(event, 'tab_about');">About</a></li>
       <li><a href="javascript:tabNothing();" class="tab_link" onclick="tabOpen(event, 'tab_settings');">Settings</a></li>
+      <li><a href="javascript:tabNothing();" class="tab_link" onclick="tabOpen(event, 'tab_file');">File</a></li>
       <li><a href="javascript:tabNothing();" class="tab_link" onclick="tabOpen(event, 'tab_program');">Program</a></li>
       <li><a href="javascript:tabNothing();" class="tab_link" onclick="tabOpen(event, 'tab_world');">World</a></li>
       <li><a href="javascript:tabNothing();" class="tab_link" onclick="tabOpen(event, 'tab_machine');">Machine</a></li>
@@ -46,22 +48,22 @@
       C variant of <a href="https://en.wikipedia.org/wiki/Karel_(programming_language)" class="link">Karel programming language</a><br/>
       by Goran "<a href="http://www.chupcko.org/" class="link">CHUPCKO</a>" Lazi&#x0107;<br/>
       <br/>
-      Version: <b>0.1</b> 2016-09-26
+      Version: <b>0.2</b> 2016-10-21
     </div>
     <div id="tab_settings" class="tab_content"></div>
+    <div id="tab_file" class="tab_content">
+      <button type="button" onclick="load();">Load</button><input type="file" id="file"/><br/>
+      <button type="button" onclick="save();">Save</button><input type="text" id="file_name" value="program.kp"/>
+      <p/>
+      Examples:<br/>
+      &nbsp;&nbsp;<a href="javascript:get('go_home.kp');">go_home.kp</a><br/>
+      &nbsp;&nbsp;<a href="javascript:get('take_all.kp');">take_all.kp</a>
+    </div>
     <div id="tab_program" class="tab_content">
       <button type="button" onclick="compile();">Compile</button><br/>
       <textarea rows="40" cols="120" id="program">
 main()
 {
-  while(!wall)
-  {
-    while(find)
-      take;
-    move;
-  }
-  while(find)
-    take;
 }
 </textarea>
     </div>

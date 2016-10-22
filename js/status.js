@@ -1,8 +1,8 @@
 function StatusClass(settings, containerID)
 {
   this.settings = settings;
-  this.containerID = document.getElementById(containerID);
-  this.containerID.addEventListener
+  this.container = document.getElementById(containerID);
+  this.container.addEventListener
   (
     'click',
     (
@@ -52,27 +52,27 @@ function StatusClass(settings, containerID)
   this.clear = function()
   {
     this.timerStop();
-    this.containerID.innerHTML = '&nbsp;';
+    this.container.innerHTML = '&nbsp;';
   };
 
   this.setMessage = function(text)
   {
     this.timerStop();
-    this.containerID.innerHTML = '<span class="status_messaage">'+text+'</span>';
+    this.container.innerHTML = '<span class="status_messaage">'+text+'</span>';
     this.timerStart();
   };
 
   this.setWarning = function(text)
   {
     this.timerStop();
-    this.containerID.innerHTML = '<span class="status_warning">'+text+'</span>';
+    this.container.innerHTML = '<span class="status_warning">'+text+'</span>';
     this.timerStart();
   };
 
   this.setError = function(text)
   {
     this.timerStop();
-    this.containerID.innerHTML = '<span class="status_error">'+text+'</span>';
+    this.container.innerHTML = '<span class="status_error">'+text+'</span>';
     this.audioError.play();
     this.timerStart();
   };

@@ -2,7 +2,7 @@ function WorldViewClass(status, world, controllerID, canvasID)
 {
   this.status = status;
   this.world = world;
-  this.controllerID = document.getElementById(controllerID);
+  this.controller = document.getElementById(controllerID);
 
   this.selectedX = 0;
   this.selectedY = 0;
@@ -123,7 +123,10 @@ function WorldViewClass(status, world, controllerID, canvasID)
     }
     x -= this.canvas.offsetLeft;
     y -= this.canvas.offsetTop;
-    return { x: x, y: y };
+    return {
+      x: x,
+      y: y
+    };
   };
 
   this.findClickBox = function(x, y, offsetX, offsetY, sizeX, sizeY, periodicX, periodicY)
@@ -135,7 +138,10 @@ function WorldViewClass(status, world, controllerID, canvasID)
       (x-offsetX)%periodicX < sizeX &&
       (y-offsetY)%periodicY < sizeY
     )
-      return { x: ((x-offsetX)/periodicX)|0, y: ((y-offsetY)/periodicY)|0 };
+      return {
+        x: ((x-offsetX)/periodicX)|0,
+        y: ((y-offsetY)/periodicY)|0
+      };
     return undefined;
   };
 
@@ -251,7 +257,7 @@ function WorldViewClass(status, world, controllerID, canvasID)
 
   this.initController = function()
   {
-    this.controllerID.innerHTML =
+    this.controller.innerHTML =
       '<table><tr>'+
       '<td class="world_view_info">NORTH: <span id="'+this.$name()+'_north" class="world_view_data"></span></td>'+
       '<td class="world_view_info">WALL: <span id="'+this.$name()+'_wall" class="world_view_data"></span></td>'+
@@ -279,7 +285,8 @@ function WorldViewClass(status, world, controllerID, canvasID)
       '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.karelBeepersDecrement();">-1</button>'+
       '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.karelBeepersIncrement();">+1</button><br/>'+
       '<br/>'+
-      '<button type="button" onclick="'+this.$name()+'.resetWorld();">Reset world</button>';
+      '<button type="button" onclick="'+this.$name()+'.resetWorld();">Reset world</button><br/>'+
+      '<button type="button" onclick="'+this.$name()+'.reloadWorld();">Reload world</button>';
   };
 
   this.drawController = function()
@@ -641,6 +648,12 @@ function WorldViewClass(status, world, controllerID, canvasID)
   this.resetWorld = function()
   {
     this.world.reset();
+    this.draw();
+  };
+
+  this.reloadWorld = function()
+  {
+    this.world.loadData();
     this.draw();
   };
 

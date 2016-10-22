@@ -11,13 +11,22 @@ function WorldClass(maxX, maxY)
   this.karelDirection = undefined;
   this.karelBeepersNumber = undefined;
 
-  this.DirectionNorth  = 0;
-  this.DirectionWest   = 1;
-  this.DirectionSouth  = 2;
-  this.DirectionEast   = 3;
+  this.loadedData = undefined;
+
+  this.DirectionNorth = 0;
+  this.DirectionWest  = 1;
+  this.DirectionSouth = 2;
+  this.DirectionEast  = 3;
 
   this.reset = function()
   {
+    this.beepersNumber = new Array();
+    for(var x = 0; x < this.maxX; x++)
+    {
+      this.beepersNumber[x] = new Array();
+      for(var y = 0; y < this.maxY; y++)
+        this.beepersNumber[x][y] = 0;
+    }
     this.wallsNorthSouth = new Array();
     for(var x = 0; x < this.maxX; x++)
     {
@@ -31,13 +40,6 @@ function WorldClass(maxX, maxY)
       this.wallsEastWest[x] = new Array();
       for(var y = 0; y < this.maxY; y++)
         this.wallsEastWest[x][y] = false;
-    }
-    this.beepersNumber = new Array();
-    for(var x = 0; x < this.maxX; x++)
-    {
-      this.beepersNumber[x] = new Array();
-      for(var y = 0; y < this.maxY; y++)
-        this.beepersNumber[x][y] = 0;
     }
     this.karelX = 0;
     this.karelY = 0;
@@ -454,6 +456,124 @@ function WorldClass(maxX, maxY)
     this.beepersNumber[this.karelX][this.karelY]--;
     this.karelBeepersNumber++;
     return true;
+  };
+
+  this.loadData = function()
+  {
+    if(this.loadedData === undefined)
+    {
+      this.reset();
+      return;
+    }
+    this.beepersNumber = this.loadedData.beepersNumber;
+    this.wallsNorthSouth = this.loadedData.wallsNorthSouth;
+    this.wallsEastWest = this.loadedData.wallsEastWest;
+    this.karelX = this.loadedData.karelX;
+    this.karelY = this.loadedData.karelY;
+    this.karelDirection = this.loadedData.karelDirection;
+    this.karelBeepersNumber = this.loadedData.karelBeepersNumber;
+  };
+
+  this.load = function(data)
+  {
+    if(data.hasOwnProperty('beepersNumber') === false)
+      return 'missing beepersNumber';
+    if(Array.isArray(data.beepersNumber) !== true && data.beepersNumber.length != this.maxX)
+      return 'bad beepersNumber';
+    for(var x = 0; x < this.maxX; x++)
+    {
+      if(Array.isArray(data.beepersNumber[x]) !== true && data.beepersNumber[x].length != this.maxY)
+        return 'bad beepersNumber element';
+      for(var y = 0; y < this.maxY; y++)
+      {
+        if(typeof this.beepersNumber[x][y] !== 'number')
+          return 'bad beepersNumber item';
+        this.beepersNumber[x][y] |= 0;
+        if(this.beepersNumber[x][y] < 0)
+          return 'bad beepersNumber item value';
+      }
+    }
+
+    if(data.hasOwnProperty('wallsNorthSouth') === false)
+      return 'missing wallsNorthSouth';
+    if(Array.isArray(data.wallsNorthSouth) !== true && data.wallsNorthSouth.length != this.maxX)
+      return 'bad wallsNorthSouth';
+    for(var x = 0; x < this.maxX; x++)
+    {
+      if(Array.isArray(data.wallsNorthSouth[x]) !== true && data.beepersNumber[x].length != this.maxY-1)
+        return 'bad wallsNorthSouth element';
+      for(var y = 0; y < this.maxY-1; y++)
+        if(typeof this.wallsNorthSouth[x][y] !== 'boolean')
+          return 'bad wallsNorthSouth item';
+    }
+
+    if(data.hasOwnProperty('wallsEastWest') === false)
+      return 'missing wallsEastWest';
+    if(Array.isArray(data.wallsEastWest) !== true && data.wallsEastWest.length != this.maxX-1)
+      return 'bad wallsEastWest';
+    for(var x = 0; x < this.maxX-1; x++)
+    {
+      if(Array.isArray(data.wallsEastWest[x]) !== true && data.wallsEastWest[x].length != this.maxY)
+        return 'bad wallsEastWest element';
+      for(var y = 0; y < this.maxY; y++)
+        if(typeof this.wallsEastWest[x][y] !== 'boolean')
+          return 'bad wallsEastWest item';
+    }
+
+    if(data.hasOwnProperty('karelX') === false)
+      return 'missing karelX';
+    if(typeof data.karelX !== 'number')
+      return 'bad karelX';
+    data.karelX |= 0;
+    if(data.karelX < 0 || data.karelX >= this.maxX)
+      return 'bad karelX value';
+
+    if(data.hasOwnProperty('karelY') === false)
+      return 'missing karelY';
+    if(typeof data.karelX !== 'number')
+      return 'bad karelY';
+    data.karelY |= 0;
+    if(data.karelY < 0 || data.karelY >= this.maxY)
+      return 'bad karelY value';
+
+    if(data.hasOwnProperty('karelDirection') === false)
+      return 'missing karelDirection';
+    if(typeof data.karelDirection !== 'number')
+      return 'bad karelDirection';
+    data.karelDirection |= 0;
+    if
+    (
+      data.karelDirection != this.DirectionNorth &&
+      data.karelDirection != this.DirectionWest &&
+      data.karelDirection != this.DirectionSouth &&
+      data.karelDirection != this.DirectionEast
+    )
+      return 'bad karelDirection value';
+
+    if(data.hasOwnProperty('karelBeepersNumber') === false)
+      return 'missing karelBeepersNumber';
+    if(typeof data.karelBeepersNumber !== 'number')
+      return 'bad karelBeepersNumber';
+    data.karelBeepersNumber |= 0;
+    if(data.karelBeepersNumber < 0)
+      return 'bad karelBeepersNumber value';
+
+    this.loadedData = data;
+    this.loadData();
+    return true;
+  };
+
+  this.save = function()
+  {
+    return {
+      'beepersNumber':      this.beepersNumber,
+      'wallsNorthSouth':    this.wallsNorthSouth,
+      'wallsEastWest':      this.wallsEastWest,
+      'karelX':             this.karelX,
+      'karelY':             this.karelY,
+      'karelDirection':     this.karelDirection,
+      'karelBeepersNumber': this.karelBeepersNumber
+    };
   };
 
   this.reset();
