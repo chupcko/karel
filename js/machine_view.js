@@ -11,10 +11,7 @@ function MachineViewClass(machine, containerID)
       this.container.innerHTML = 'Not yet compiled';
       return;
     }
-    var text =
-      '<div class="machine_view_overflow">'+
-      '<div class="machine_view_code">'+
-      '<table class="machine_view_code_table">';
+    var text = '<div class="overflow"><div class="left"><table class="machine_view_code_table">';
     for(var i = 0; i < this.machine.code.length; i++)
     {
       text += '<tr id="'+this.$name()+'_code_row_'+i+'"><td class="machine_view_code_address_cell">';
@@ -23,8 +20,9 @@ function MachineViewClass(machine, containerID)
       text += i+':</td><td class="machine_view_code_code_cell">'+this.machine.code[i]+'</td><td>';
       if(i+1 < this.machine.code.length && typeof this.machine.code[i+1] == 'number')
       {
-        if(this.machine.code[i] == this.machineCodeCall && this.machine.addressFunctionTable[this.machine.code[i+1]] !== undefined)
-          text += '['+this.machine.addressFunctionTable[this.machine.code[i+1]]+'] ';
+        var functionName = this.machine.addressFunctionTable[this.machine.code[i+1]];
+        if(this.machine.code[i] == this.machine.CodeCall && functionName !== undefined)
+          text += '['+functionName+'] ';
         text += this.machine.code[i+1];
         i++;
       }
@@ -33,7 +31,7 @@ function MachineViewClass(machine, containerID)
       text += '</td></tr>';
     }
     text +=
-      '</table></div><div>'+
+      '</table></div><div class="left">'+
       'PC = <span id="'+this.$name()+'_pc" class="machine_view_data"></span><br/>'+
       'Stopped = <span id="'+this.$name()+'_stopped" class="machine_view_data"></span><br/>'+
       '<br/>'+
@@ -59,7 +57,7 @@ function MachineViewClass(machine, containerID)
     if(this.machine.stack.length > 0)
     {
       var text = '';
-      for(var i = 0; i < this.machine.stack.length; i++)
+      for(var i = this.machine.stack.length-1; i >= 0; i--)
         switch(this.machine.stack[i].type)
         {
           case this.machine.StackTypeNumber:

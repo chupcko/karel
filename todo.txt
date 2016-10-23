@@ -1,7 +1,5 @@
--mozda da stack ispisuje napako ?
--dve kolone posteno uradi
 -odvoji snimanje sveta i programa, kao i load/get
 -statistiku masine ubaci
 -sirina u machine_view
--Add break
+-Add break, continue
 -Add examples

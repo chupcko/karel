@@ -21,6 +21,8 @@
               | move
               | put
               | take
+              | break
+              | continue
               | return
               | stop
               | name left_parentheses right_parentheses

@@ -12,40 +12,44 @@ function CompilerClass(machine)
   this.LexemeSemicolon        =  6;
   this.LexemeNumber           =  7;
   this.LexemeName             =  8;
-  this.LexemeElse             =  9;
-  this.LexemeFind             = 10;
-  this.LexemeHave             = 11;
-  this.LexemeIf               = 12;
-  this.LexemeLeft             = 13;
-  this.LexemeLoop             = 14;
-  this.LexemeMove             = 15;
-  this.LexemeNorth            = 16;
-  this.LexemePut              = 17;
-  this.LexemeRepeat           = 18;
-  this.LexemeReturn           = 19;
-  this.LexemeStop             = 20;
-  this.LexemeTake             = 21;
-  this.LexemeWall             = 22;
-  this.LexemeWhile            = 23;
+  this.LexemeBreak            =  9;
+  this.LexemeContinue         = 10;
+  this.LexemeElse             = 11;
+  this.LexemeFind             = 12;
+  this.LexemeHave             = 13;
+  this.LexemeIf               = 14;
+  this.LexemeLeft             = 15;
+  this.LexemeLoop             = 16;
+  this.LexemeMove             = 17;
+  this.LexemeNorth            = 18;
+  this.LexemePut              = 19;
+  this.LexemeRepeat           = 20;
+  this.LexemeReturn           = 21;
+  this.LexemeStop             = 22;
+  this.LexemeTake             = 23;
+  this.LexemeWall             = 24;
+  this.LexemeWhile            = 25;
 
   this.keyWordsTable =
   [
-    { value: 'else',   lexeme: this.LexemeElse   },
-    { value: 'find',   lexeme: this.LexemeFind   },
-    { value: 'have',   lexeme: this.LexemeHave   },
-    { value: 'if',     lexeme: this.LexemeIf     },
-    { value: 'left',   lexeme: this.LexemeLeft   },
-    { value: 'loop',   lexeme: this.LexemeLoop   },
-    { value: 'move',   lexeme: this.LexemeMove   },
-    { value: 'name',   lexeme: this.LexemeName   },
-    { value: 'north',  lexeme: this.LexemeNorth  },
-    { value: 'put',    lexeme: this.LexemePut    },
-    { value: 'repeat', lexeme: this.LexemeRepeat },
-    { value: 'return', lexeme: this.LexemeReturn },
-    { value: 'stop',   lexeme: this.LexemeStop   },
-    { value: 'take',   lexeme: this.LexemeTake   },
-    { value: 'wall',   lexeme: this.LexemeWall   },
-    { value: 'while',  lexeme: this.LexemeWhile  }
+    { value: 'break',    lexeme: this.LexemeBreak    },
+    { value: 'continue', lexeme: this.LexemeContinue },
+    { value: 'else',     lexeme: this.LexemeElse     },
+    { value: 'find',     lexeme: this.LexemeFind     },
+    { value: 'have',     lexeme: this.LexemeHave     },
+    { value: 'if',       lexeme: this.LexemeIf       },
+    { value: 'left',     lexeme: this.LexemeLeft     },
+    { value: 'loop',     lexeme: this.LexemeLoop     },
+    { value: 'move',     lexeme: this.LexemeMove     },
+    { value: 'name',     lexeme: this.LexemeName     },
+    { value: 'north',    lexeme: this.LexemeNorth    },
+    { value: 'put',      lexeme: this.LexemePut      },
+    { value: 'repeat',   lexeme: this.LexemeRepeat   },
+    { value: 'return',   lexeme: this.LexemeReturn   },
+    { value: 'stop',     lexeme: this.LexemeStop     },
+    { value: 'take',     lexeme: this.LexemeTake     },
+    { value: 'wall',     lexeme: this.LexemeWall     },
+    { value: 'while',    lexeme: this.LexemeWhile    }
   ];
 
   this.text = undefined;
@@ -235,6 +239,8 @@ function CompilerClass(machine)
       case this.LexemeRightBraces:
       case this.LexemeSemicolon:
       case this.LexemeName:
+      case this.LexemeBreak:
+      case this.LexemeContinue:
       case this.LexemeIf:
       case this.LexemeLeft:
       case this.LexemeLoop:
@@ -317,6 +323,14 @@ function CompilerClass(machine)
         this.addToCode(this.machine.CodeTake);
         this.loadLexeme();
         break;
+      case this.LexemeBreak:
+        /*#*/
+        this.loadLexeme();
+        break;
+      case this.LexemeContinue:
+        /*#*/
+        this.loadLexeme();
+        break;
       case this.LexemeReturn:
         if(this.nestedStackSize > 0)
         {
@@ -360,6 +374,8 @@ function CompilerClass(machine)
       case this.LexemeMove:
       case this.LexemePut:
       case this.LexemeTake:
+      case this.LexemeBreak:
+      case this.LexemeContinue:
       case this.LexemeReturn:
       case this.LexemeStop:
         result = this.parserPrimitive();
@@ -460,6 +476,8 @@ function CompilerClass(machine)
       this.lexeme == this.LexemeLeftBraces ||
       this.lexeme == this.LexemeSemicolon ||
       this.lexeme == this.LexemeName ||
+      this.lexeme == this.LexemeBreak ||
+      this.lexeme == this.LexemeContinue ||
       this.lexeme == this.LexemeIf ||
       this.lexeme == this.LexemeLeft ||
       this.lexeme == this.LexemeLoop ||

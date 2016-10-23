@@ -1,14 +1,3 @@
-.machine_view_overflow
-{
-  overflow: auto;
-}
-
-.machine_view_code
-{
-  float: left;
-  padding-right: 12px;
-}
-
 .machine_view_code_table
 {
   border-collapse: collapse;
