@@ -74,13 +74,19 @@ function CompilerClass(machine)
   this.ResultExceptedPositiveNumber         = 'Number must be positive';
   this.ResultExceptedAlreadyDefinedFunction = 'Function "{}" already defined';
   this.ResultExceptedUndefinedFunction      = 'Undefined call of "{}"';
+  this.ResultBreakWithoutLoop               = 'Break without while, loop, repeat';
+  this.ResultContinueWithoutLoop            = 'Continue without while, loop, repeat';
+
+  this.LoopTypeWhile  = 1;
+  this.LoopTypeLoop   = 2;
+  this.LoopTypeRepeat = 3;
 
   this.code = undefined;
   this.address = undefined;
   this.callTable = undefined;
   this.functionAddressTable = undefined;
   this.addressFunctionTable = undefined;
-  this.nestedStackSize = undefined;
+  this.loopInfo = undefined;
 
   this.addToCode = function(what)
   {
@@ -92,7 +98,7 @@ function CompilerClass(machine)
 
   this.addTocallTable = function(name, address, line, column)
   {
-    this.callTable.push({ name: name, address: address, line: line, column: column});
+    this.callTable.push({ name: name, address: address, line: line, column: column });
   };
 
   this.addToFunctionAddressTable = function(name, address)
@@ -102,6 +108,11 @@ function CompilerClass(machine)
     this.functionAddressTable[name] = address;
     this.addressFunctionTable[address] = name;
     return false;
+  };
+
+  this.addToLoopInfo = function(type)
+  {
+    this.loopInfo.push({ type: type, breakAddress: [], continueAddress: [] });
   };
 
   this.nextTextPosition = function()
@@ -324,18 +335,33 @@ function CompilerClass(machine)
         this.loadLexeme();
         break;
       case this.LexemeBreak:
-        /*#*/
+        if(this.loopInfo.length == 0)
+          return this.makeResult(this.ResultBreakWithoutLoop);
+        if(this.loopInfo[this.loopInfo.length-1].type == this.LoopTypeRepeat)
+        {
+          this.addToCode(this.machine.CodePop);
+          this.addToCode(1);
+        }
+        this.addToCode(this.machine.CodeJump);
+        this.loopInfo[this.loopInfo.length-1].breakAddress.push(this.addToCode(-1));
         this.loadLexeme();
         break;
       case this.LexemeContinue:
-        /*#*/
+        if(this.loopInfo.length == 0)
+          return this.makeResult(this.ResultContinueWithoutLoop);
+        this.addToCode(this.machine.CodeJump);
+        this.loopInfo[this.loopInfo.length-1].continueAddress.push(this.addToCode(-1));
         this.loadLexeme();
         break;
       case this.LexemeReturn:
-        if(this.nestedStackSize > 0)
+        var nestedStackSize = 0;
+        for(var i = 0; i < this.loopInfo.length; i++)
+          if(this.loopInfo[i].type == this.LoopTypeRepeat)
+            nestedStackSize++;
+        if(nestedStackSize > 0)
         {
           this.addToCode(this.machine.CodePop);
-          this.addToCode(this.nestedStackSize);
+          this.addToCode(nestedStackSize);
         }
         this.addToCode(this.machine.CodeRet);
         this.loadLexeme();
@@ -393,9 +419,9 @@ function CompilerClass(machine)
         result = this.parserCondition();
         if(result !== true)
           return result;
-        var elseAddress = this.addToCode(-1);
         if(this.lexeme != this.LexemeRightParenthesesrens)
           return this.makeResult(this.ResultExceptedRightParentheses);
+        var elseAddress = this.addToCode(-1);
         this.loadLexeme();
         result = this.parserStatment();
         if(result !== true)
@@ -413,9 +439,10 @@ function CompilerClass(machine)
         result = this.parserCondition();
         if(result !== true)
           return result;
-        var toOutAddress = this.addToCode(-1);
         if(this.lexeme != this.LexemeRightParenthesesrens)
           return this.makeResult(this.ResultExceptedRightParentheses);
+        var toOutAddress = this.addToCode(-1);
+        this.addToLoopInfo(this.LoopTypeWhile);
         this.loadLexeme();
         result = this.parserStatment();
         if(result !== true)
@@ -423,15 +450,26 @@ function CompilerClass(machine)
         this.addToCode(this.machine.CodeJump);
         this.addToCode(loopAddress);
         this.code[toOutAddress] = this.address;
+        var loopInfoTop = this.loopInfo.pop();
+        for(var i = 0; i < loopInfoTop.breakAddress.length; i++)
+          this.code[loopInfoTop.breakAddress[i]] = this.address;
+        for(var i = 0; i < loopInfoTop.continueAddress.length; i++)
+          this.code[loopInfoTop.continueAddress[i]] = loopAddress;
         break;
       case this.LexemeLoop:
         var loopAddress = this.address;
+        this.addToLoopInfo(this.LoopTypeLoop);
         this.loadLexeme();
         result = this.parserStatment();
         if(result !== true)
           return result;
         this.addToCode(this.machine.CodeJump);
         this.addToCode(loopAddress);
+        var loopInfoTop = this.loopInfo.pop();
+        for(var i = 0; i < loopInfoTop.breakAddress.length; i++)
+          this.code[loopInfoTop.breakAddress[i]] = this.address;
+        for(var i = 0; i < loopInfoTop.continueAddress.length; i++)
+          this.code[loopInfoTop.continueAddress[i]] = loopAddress;
         break;
       case this.LexemeRepeat:
         this.addToCode(this.machine.CodeRep);
@@ -445,18 +483,22 @@ function CompilerClass(machine)
         if(number <= 0)
           return this.makeResult(this.ResultExceptedPositiveNumber);
         this.addToCode(number-1);
-        var loopAddress = this.address;
         this.loadLexeme();
         if(this.lexeme != this.LexemeRightParenthesesrens)
           return this.makeResult(this.ResultExceptedRightParentheses);
-        this.nestedStackSize++;
+        var loopAddress = this.address;
+        this.addToLoopInfo(this.LoopTypeRepeat);
         this.loadLexeme();
         result = this.parserStatment();
         if(result !== true)
           return result;
-        this.nestedStackSize--;
-        this.addToCode(this.machine.CodeNext);
+        var continueAddress = this.addToCode(this.machine.CodeNext);
         this.addToCode(loopAddress);
+        var loopInfoTop = this.loopInfo.pop();
+        for(var i = 0; i < loopInfoTop.breakAddress.length; i++)
+          this.code[loopInfoTop.breakAddress[i]] = this.address;
+        for(var i = 0; i < loopInfoTop.continueAddress.length; i++)
+          this.code[loopInfoTop.continueAddress[i]] = continueAddress;
         break;
       case this.LexemeLeftBraces:
         result = this.parserBlock();
@@ -525,7 +567,6 @@ function CompilerClass(machine)
       this.loadLexeme();
       if(this.lexeme != this.LexemeRightParenthesesrens)
         return this.makeResult(this.ResultExceptedRightParentheses);
-      this.nestedStackSize = 0;
       this.loadLexeme();
       var result = this.parserBlock();
       if(result !== true)
@@ -549,6 +590,7 @@ function CompilerClass(machine)
     this.callTable = [];
     this.functionAddressTable = [];
     this.addressFunctionTable = [];
+    this.loopInfo = [];
 
     this.machine.unSet();
 

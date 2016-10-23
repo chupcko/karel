@@ -66,7 +66,7 @@ function MachineViewClass(machine, containerID)
           case this.machine.StackTypeAddress:
             var functionAddress = this.machine.code[this.machine.stack[i].data-1];
             var functionName = undefined;
-            if(typeof functionAddress === 'number')
+            if(typeof functionAddress == 'number')
               functionName = this.machine.addressFunctionTable[functionAddress];
             text += '&nbsp;&nbsp;(address) '+this.machine.stack[i].data;
             if(functionName !== undefined)

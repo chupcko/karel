@@ -515,7 +515,7 @@ function WorldClass(maxX, maxY)
         return 'bad beepersNumber element';
       for(var y = 0; y < this.maxY; y++)
       {
-        if(typeof this.beepersNumber[x][y] !== 'number')
+        if(typeof this.beepersNumber[x][y] != 'number')
           return 'bad beepersNumber item';
         this.beepersNumber[x][y] |= 0;
         if(this.beepersNumber[x][y] < 0)
@@ -532,7 +532,7 @@ function WorldClass(maxX, maxY)
       if(Array.isArray(data.wallsNorthSouth[x]) !== true && data.beepersNumber[x].length != this.maxY-1)
         return 'bad wallsNorthSouth element';
       for(var y = 0; y < this.maxY-1; y++)
-        if(typeof this.wallsNorthSouth[x][y] !== 'boolean')
+        if(typeof this.wallsNorthSouth[x][y] != 'boolean')
           return 'bad wallsNorthSouth item';
     }
 
@@ -545,13 +545,13 @@ function WorldClass(maxX, maxY)
       if(Array.isArray(data.wallsEastWest[x]) !== true && data.wallsEastWest[x].length != this.maxY)
         return 'bad wallsEastWest element';
       for(var y = 0; y < this.maxY; y++)
-        if(typeof this.wallsEastWest[x][y] !== 'boolean')
+        if(typeof this.wallsEastWest[x][y] != 'boolean')
           return 'bad wallsEastWest item';
     }
 
     if(data.hasOwnProperty('karelX') === false)
       return 'missing karelX';
-    if(typeof data.karelX !== 'number')
+    if(typeof data.karelX != 'number')
       return 'bad karelX';
     data.karelX |= 0;
     if(data.karelX < 0 || data.karelX >= this.maxX)
@@ -559,7 +559,7 @@ function WorldClass(maxX, maxY)
 
     if(data.hasOwnProperty('karelY') === false)
       return 'missing karelY';
-    if(typeof data.karelX !== 'number')
+    if(typeof data.karelX != 'number')
       return 'bad karelY';
     data.karelY |= 0;
     if(data.karelY < 0 || data.karelY >= this.maxY)
@@ -567,7 +567,7 @@ function WorldClass(maxX, maxY)
 
     if(data.hasOwnProperty('karelDirection') === false)
       return 'missing karelDirection';
-    if(typeof data.karelDirection !== 'number')
+    if(typeof data.karelDirection != 'number')
       return 'bad karelDirection';
     data.karelDirection |= 0;
     if
@@ -581,7 +581,7 @@ function WorldClass(maxX, maxY)
 
     if(data.hasOwnProperty('karelBeepersNumber') === false)
       return 'missing karelBeepersNumber';
-    if(typeof data.karelBeepersNumber !== 'number')
+    if(typeof data.karelBeepersNumber != 'number')
       return 'bad karelBeepersNumber';
     data.karelBeepersNumber |= 0;
     if(data.karelBeepersNumber < 0)
