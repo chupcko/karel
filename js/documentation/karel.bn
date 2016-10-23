@@ -12,6 +12,7 @@
 <statment>  ::= <primitive> semicolon
               | if left_parentheses <condition> right_parentheses <statment> <else>
               | while left_parentheses <condition> right_parentheses <statment>
+              | loop <statment>
               | repeat left_parentheses number right_parentheses <statment>
               | <block>
               .

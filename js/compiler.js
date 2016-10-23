@@ -17,15 +17,16 @@ function CompilerClass(machine)
   this.LexemeHave             = 11;
   this.LexemeIf               = 12;
   this.LexemeLeft             = 13;
-  this.LexemeMove             = 14;
-  this.LexemeNorth            = 15;
-  this.LexemePut              = 16;
-  this.LexemeRepeat           = 17;
-  this.LexemeReturn           = 18;
-  this.LexemeStop             = 19;
-  this.LexemeTake             = 20;
-  this.LexemeWall             = 21;
-  this.LexemeWhile            = 22;
+  this.LexemeLoop             = 14;
+  this.LexemeMove             = 15;
+  this.LexemeNorth            = 16;
+  this.LexemePut              = 17;
+  this.LexemeRepeat           = 18;
+  this.LexemeReturn           = 19;
+  this.LexemeStop             = 20;
+  this.LexemeTake             = 21;
+  this.LexemeWall             = 22;
+  this.LexemeWhile            = 23;
 
   this.keyWordsTable =
   [
@@ -34,6 +35,7 @@ function CompilerClass(machine)
     { value: 'have',   lexeme: this.LexemeHave   },
     { value: 'if',     lexeme: this.LexemeIf     },
     { value: 'left',   lexeme: this.LexemeLeft   },
+    { value: 'loop',   lexeme: this.LexemeLoop   },
     { value: 'move',   lexeme: this.LexemeMove   },
     { value: 'name',   lexeme: this.LexemeName   },
     { value: 'north',  lexeme: this.LexemeNorth  },
@@ -235,6 +237,7 @@ function CompilerClass(machine)
       case this.LexemeName:
       case this.LexemeIf:
       case this.LexemeLeft:
+      case this.LexemeLoop:
       case this.LexemeMove:
       case this.LexemePut:
       case this.LexemeRepeat:
@@ -405,6 +408,15 @@ function CompilerClass(machine)
         this.addToCode(loopAddress);
         this.code[toOutAddress] = this.address;
         break;
+      case this.LexemeLoop:
+        var loopAddress = this.address;
+        this.loadLexeme();
+        result = this.parserStatment();
+        if(result !== true)
+          return result;
+        this.addToCode(this.machine.CodeJump);
+        this.addToCode(loopAddress);
+        break;
       case this.LexemeRepeat:
         this.addToCode(this.machine.CodeRep);
         this.loadLexeme();
@@ -450,6 +462,7 @@ function CompilerClass(machine)
       this.lexeme == this.LexemeName ||
       this.lexeme == this.LexemeIf ||
       this.lexeme == this.LexemeLeft ||
+      this.lexeme == this.LexemeLoop ||
       this.lexeme == this.LexemeMove ||
       this.lexeme == this.LexemePut ||
       this.lexeme == this.LexemeRepeat ||
