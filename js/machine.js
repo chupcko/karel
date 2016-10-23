@@ -3,7 +3,7 @@ function MachineClass(world)
   this.world = world;
 
   this.code = undefined;
-  this.functionsTable = undefined;
+  this.addressFunctionTable = undefined;
   this.pc = undefined;
   this.stack = undefined;
   this.stopped = undefined;
@@ -19,10 +19,33 @@ function MachineClass(world)
   this.ResultNoCode         = 'Not found code in machine, first compile';
   this.ResultStopped        = 'Machine is stopped';
 
+  this.CodeLeft = 'left';
+  this.CodeMove = 'move';
+  this.CodePut  = 'put';
+  this.CodeTake = 'take';
+  this.CodeStop = 'stop';
+  this.CodeJump = 'jump';
+  this.CodeCall = 'call';
+  this.CodeRet  = 'ret';
+  this.CodeBn   = 'bn';
+  this.CodeBw   = 'bw';
+  this.CodeBh   = 'bh';
+  this.CodeBf   = 'bf';
+  this.CodeBnn  = 'bnn';
+  this.CodeBnw  = 'bnw';
+  this.CodeBnh  = 'bnh';
+  this.CodeBnf  = 'bnf';
+  this.CodeRep  = 'rep';
+  this.CodeNext = 'next';
+  this.CodePop  = 'pop';
+
+  this.StackTypeNumber  = 1;
+  this.StackTypeAddress = 2;
+
   this.unSet = function()
   {
     this.code = undefined;
-    this.functionsTable = undefined;
+    this.addressFunctionTable = undefined;
     this.pc = undefined;
     this.stack = undefined;
     this.stopped = undefined;
@@ -35,13 +58,10 @@ function MachineClass(world)
     this.stopped = false;
   };
 
-  this.set = function(code, functionsTable)
+  this.set = function(code, addressFunctionTable)
   {
     this.code = code;
-    this.functionsTable = [];
-    for(var key in functionsTable)
-      if(key != '$id' && key != '$name')
-        this.functionsTable[functionsTable[key]] = key;
+    this.addressFunctionTable = addressFunctionTable;
     this.reset();
   };
 
@@ -73,50 +93,50 @@ function MachineClass(world)
       return this.stop(this.ResultBadPC);
     switch(this.code[this.pc])
     {
-      case 'left':
+      case this.CodeLeft:
         this.world.doLeft();
         this.pc++;
         break;
-      case 'move':
+      case this.CodeMove:
         if(!this.world.doMove())
           return this.stop(this.ResultCannotMove);
         this.pc++;
         break;
-      case 'put':
+      case this.CodePut:
         if(!this.world.doPut())
           return this.stop(this.ResultCannotPut);
         this.pc++;
         break;
-      case 'take':
+      case this.CodeTake:
         if(!this.world.doTake())
           return this.stop(this.ResultCannotTake);
         this.pc++;
         break;
-      case 'stop':
+      case this.CodeStop:
         return this.stop(false);
         break;
-      case 'jump':
+      case this.CodeJump:
         this.pc++;
         if(this.pcIsBad())
           return this.stop(this.ResultBadAddress);
         this.pc = this.code[this.pc];
         break;
-      case 'call':
+      case this.CodeCall:
         this.pc++;
         if(this.pcIsBad())
           return this.stop(this.ResultBadAddress);
-        this.stack.push({ type: 'address', data: this.pc+1 });
+        this.stack.push({ type: this.StackTypeAddress, data: this.pc+1 });
         this.pc = this.code[this.pc];
         break;
-      case 'ret':
+      case this.CodeRet:
         var address = this.stack.pop();
         if(address === undefined)
           return this.stop(this.ResultEmptyStack);
-        if(address.type != 'address')
+        if(address.type != this.StackTypeAddress)
           return this.stop(this.ResultBadDataInStack);
         this.pc = address.data;
         break;
-      case 'bn':
+      case this.CodeBn:
         this.pc++;
         if(this.world.conditionNorth())
         {
@@ -127,7 +147,7 @@ function MachineClass(world)
         else
           this.pc++;
         break;
-      case 'bw':
+      case this.CodeBw:
         this.pc++;
         if(this.world.conditionWall())
         {
@@ -138,7 +158,7 @@ function MachineClass(world)
         else
           this.pc++;
         break;
-      case 'bh':
+      case this.CodeBh:
         this.pc++;
         if(this.world.conditionHave())
         {
@@ -149,7 +169,7 @@ function MachineClass(world)
         else
           this.pc++;
         break;
-      case 'bf':
+      case this.CodeBf:
         this.pc++;
         if(this.world.conditionFind())
         {
@@ -160,7 +180,7 @@ function MachineClass(world)
         else
           this.pc++;
         break;
-      case 'bnn':
+      case this.CodeBnn:
         this.pc++;
         if(!this.world.conditionNorth())
         {
@@ -171,7 +191,7 @@ function MachineClass(world)
         else
           this.pc++;
         break;
-      case 'bnw':
+      case this.CodeBnw:
         this.pc++;
         if(!this.world.conditionWall())
         {
@@ -182,7 +202,7 @@ function MachineClass(world)
         else
           this.pc++;
         break;
-      case 'bnh':
+      case this.CodeBnh:
         this.pc++;
         if(!this.world.conditionHave())
         {
@@ -193,7 +213,7 @@ function MachineClass(world)
         else
           this.pc++;
         break;
-      case 'bnf':
+      case this.CodeBnf:
         this.pc++;
         if(!this.world.conditionFind())
         {
@@ -204,23 +224,23 @@ function MachineClass(world)
         else
           this.pc++;
         break;
-      case 'rep':
+      case this.CodeRep:
         this.pc++;
         if(this.pcIsBad())
           return this.stop(this.ResultBadAddress);
-        this.stack.push({ type: 'number', data: this.code[this.pc] });
+        this.stack.push({ type: this.StackTypeNumber, data: this.code[this.pc] });
         this.pc++;
         break;
-      case 'next':
+      case this.CodeNext:
         this.pc++;
         var number = this.stack.pop()
         if(number === undefined)
           return this.stop(this.ResultEmptyStack);
-        if(number.type != 'number')
+        if(number.type != this.StackTypeNumber)
           return this.stop(this.ResultBadDataInStack)
         if(number.data > 0)
         {
-          this.stack.push({ type: 'number', data: number.data-1 });
+          this.stack.push({ type: this.StackTypeNumber, data: number.data-1 });
           if(this.pcIsBad())
             return this.stop(this.ResultBadAddress);
           this.pc = this.code[this.pc];
@@ -228,7 +248,7 @@ function MachineClass(world)
         else
           this.pc++;
         break;
-      case 'pop':
+      case this.CodePop:
         this.pc++;
         if(this.pcIsBad())
           return this.stop(this.ResultBadAddress);

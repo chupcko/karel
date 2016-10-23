@@ -480,6 +480,29 @@ function WorldClass(maxX, maxY)
     this.karelBeepersNumber = this.copiedData.karelBeepersNumber;
   };
 
+  this.saveCopiedData = function()
+  {
+    this.copiedData =
+    {
+      'beepersNumber':      undefined,
+      'wallsNorthSouth':    undefined,
+      'wallsEastWest':      undefined,
+      'karelX':             this.karelX,
+      'karelY':             this.karelY,
+      'karelDirection':     this.karelDirection,
+      'karelBeepersNumber': this.karelBeepersNumber
+    };
+    this.copiedData.beepersNumber = new Array();
+    for(var x = 0; x < this.maxX; x++)
+      this.copiedData.beepersNumber[x] = this.beepersNumber[x].slice();
+    this.copiedData.wallsNorthSouth = new Array();
+    for(var x = 0; x < this.maxX; x++)
+      this.copiedData.wallsNorthSouth[x] = this.wallsNorthSouth[x].slice();
+    this.copiedData.wallsEastWest = new Array();
+    for(var x = 0; x < this.maxX-1; x++)
+      this.copiedData.wallsEastWest[x] = this.wallsEastWest[x].slice();
+  };
+
   this.load = function(data)
   {
     if(data.hasOwnProperty('beepersNumber') === false)
@@ -571,25 +594,7 @@ function WorldClass(maxX, maxY)
 
   this.save = function()
   {
-    this.copiedData =
-    {
-      'beepersNumber':      undefined,
-      'wallsNorthSouth':    undefined,
-      'wallsEastWest':      undefined,
-      'karelX':             this.karelX,
-      'karelY':             this.karelY,
-      'karelDirection':     this.karelDirection,
-      'karelBeepersNumber': this.karelBeepersNumber
-    };
-    this.copiedData.beepersNumber = new Array();
-    for(var x = 0; x < this.maxX; x++)
-      this.copiedData.beepersNumber[x] = this.beepersNumber[x].slice();
-    this.copiedData.wallsNorthSouth = new Array();
-    for(var x = 0; x < this.maxX; x++)
-      this.copiedData.wallsNorthSouth[x] = this.wallsNorthSouth[x].slice();
-    this.copiedData.wallsEastWest = new Array();
-    for(var x = 0; x < this.maxX-1; x++)
-      this.copiedData.wallsEastWest[x] = this.wallsEastWest[x].slice();
+    this.saveCopiedData();
     return this.copiedData;
   };
 

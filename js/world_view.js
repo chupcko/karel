@@ -285,8 +285,9 @@ function WorldViewClass(status, world, controllerID, canvasID)
       '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.karelBeepersDecrement();">-1</button>'+
       '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.karelBeepersIncrement();">+1</button><br/>'+
       '<br/>'+
-      '<button type="button" onclick="'+this.$name()+'.resetWorld();">Reset world</button><br/>'+
-      '<button type="button" onclick="'+this.$name()+'.reloadWorld();">Reload world</button>';
+      '<button type="button" onclick="'+this.$name()+'.resetWorld();">Reset world</button>&nbsp;&nbsp;'+
+      '<button type="button" onclick="'+this.$name()+'.storeWorld();">Store world</button>&nbsp;&nbsp;'+
+      '<button type="button" onclick="'+this.$name()+'.restoreWorld();">Restore world</button>&nbsp;&nbsp;';
   };
 
   this.drawController = function()
@@ -651,7 +652,13 @@ function WorldViewClass(status, world, controllerID, canvasID)
     this.draw();
   };
 
-  this.reloadWorld = function()
+  this.storeWorld = function()
+  {
+    this.world.saveCopiedData();
+    this.draw();
+  };
+
+  this.restoreWorld = function()
   {
     this.world.loadCopiedData();
     this.draw();

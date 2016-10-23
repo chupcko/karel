@@ -71,8 +71,9 @@ function CompilerClass(machine)
 
   this.code = undefined;
   this.address = undefined;
-  this.callsTable = undefined;
-  this.functionsTable = undefined;
+  this.callTable = undefined;
+  this.functionAddressTable = undefined;
+  this.addressFunctionTable = undefined;
   this.nestedStackSize = undefined;
 
   this.addToCode = function(what)
@@ -83,16 +84,17 @@ function CompilerClass(machine)
     return returnValue;
   };
 
-  this.addToCallsTable = function(name, address, line, column)
+  this.addTocallTable = function(name, address, line, column)
   {
-    this.callsTable.push({ name: name, address: address, line: line, column: column});
+    this.callTable.push({ name: name, address: address, line: line, column: column});
   };
 
-  this.addToFunctionsTable = function(name, address)
+  this.addToFunctionAddressTable = function(name, address)
   {
-    if(this.functionsTable[name] !== undefined)
+    if(Object.keys(this.functionAddressTable).indexOf(name) >= 0)
       return true;
-    this.functionsTable[name] = address;
+    this.functionAddressTable[name] = address;
+    this.addressFunctionTable[address] = name;
     return false;
   };
 
@@ -218,7 +220,7 @@ function CompilerClass(machine)
     switch(this.lexeme)
     {
       case this.LexemeElse:
-        this.addToCode('jump');
+        this.addToCode(this.machine.CodeJump);
         var toOutAddress = this.addToCode(-1);
         this.code[elseAddress] = this.address;
         this.loadLexeme();
@@ -260,30 +262,30 @@ function CompilerClass(machine)
     {
       case this.LexemeFind:
         if(flag)
-          this.addToCode('bf');
+          this.addToCode(this.machine.CodeBf);
         else
-          this.addToCode('bnf');
+          this.addToCode(this.machine.CodeBnf);
         this.loadLexeme();
         break;
       case this.LexemeHave:
         if(flag)
-          this.addToCode('bh');
+          this.addToCode(this.machine.CodeBh);
         else
-          this.addToCode('bnh');
+          this.addToCode(this.machine.CodeBnh);
         this.loadLexeme();
         break;
       case this.LexemeNorth:
         if(flag)
-          this.addToCode('bn');
+          this.addToCode(this.machine.CodeBn);
         else
-          this.addToCode('bnn');
+          this.addToCode(this.machine.CodeBnn);
         this.loadLexeme();
         break;
       case this.LexemeWall:
         if(flag)
-          this.addToCode('bw');
+          this.addToCode(this.machine.CodeBw);
         else
-          this.addToCode('bnw');
+          this.addToCode(this.machine.CodeBnw);
         this.loadLexeme();
         break;
       default:
@@ -297,37 +299,37 @@ function CompilerClass(machine)
     switch(this.lexeme)
     {
       case this.LexemeLeft:
-        this.addToCode('left');
+        this.addToCode(this.machine.CodeLeft);
         this.loadLexeme();
         break;
       case this.LexemeMove:
-        this.addToCode('move');
+        this.addToCode(this.machine.CodeMove);
         this.loadLexeme();
         break;
       case this.LexemePut:
-        this.addToCode('put');
+        this.addToCode(this.machine.CodePut);
         this.loadLexeme();
         break;
       case this.LexemeTake:
-        this.addToCode('take');
+        this.addToCode(this.machine.CodeTake);
         this.loadLexeme();
         break;
       case this.LexemeReturn:
         if(this.nestedStackSize > 0)
         {
-          this.addToCode('pop');
+          this.addToCode(this.machine.CodePop);
           this.addToCode(this.nestedStackSize);
         }
-        this.addToCode('ret');
+        this.addToCode(this.machine.CodeRet);
         this.loadLexeme();
         break;
       case this.LexemeStop:
-        this.addToCode('stop');
+        this.addToCode(this.machine.CodeStop);
         this.loadLexeme();
         break;
       case this.LexemeName:
-        this.addToCode('call');
-        this.addToCallsTable(this.lexemeValue, this.addToCode('-1'), this.lexemeLine, this.lexemeColumn);
+        this.addToCode(this.machine.CodeCall);
+        this.addTocallTable(this.lexemeValue, this.addToCode(-1), this.lexemeLine, this.lexemeColumn);
         this.loadLexeme();
         if(this.lexeme != this.LexemeLeftParenthesesns)
           return this.makeResult(this.ResultExceptedLeftParentheses);
@@ -399,12 +401,12 @@ function CompilerClass(machine)
         result = this.parserStatment();
         if(result !== true)
           return result;
-        this.addToCode('jump');
+        this.addToCode(this.machine.CodeJump);
         this.addToCode(loopAddress);
         this.code[toOutAddress] = this.address;
         break;
       case this.LexemeRepeat:
-        this.addToCode('rep');
+        this.addToCode(this.machine.CodeRep);
         this.loadLexeme();
         if(this.lexeme != this.LexemeLeftParenthesesns)
           return this.makeResult(this.ResultExceptedLeftParentheses);
@@ -425,7 +427,7 @@ function CompilerClass(machine)
         if(result !== true)
           return result;
         this.nestedStackSize--;
-        this.addToCode('next');
+        this.addToCode(this.machine.CodeNext);
         this.addToCode(loopAddress);
         break;
       case this.LexemeLeftBraces:
@@ -484,7 +486,7 @@ function CompilerClass(machine)
   {
     while(this.lexeme == this.LexemeName)
     {
-      if(this.addToFunctionsTable(this.lexemeValue, this.address))
+      if(this.addToFunctionAddressTable(this.lexemeValue, this.address))
         return this.makeResult(this.ResultExceptedAlreadyDefinedFunction.replace('{}', this.lexemeValue));
       this.loadLexeme();
       if(this.lexeme != this.LexemeLeftParenthesesns)
@@ -497,7 +499,7 @@ function CompilerClass(machine)
       var result = this.parserBlock();
       if(result !== true)
         return result;
-      this.addToCode('ret');
+      this.addToCode(this.machine.CodeRet);
     }
     if(this.lexeme != this.LexemeEnd)
       return this.makeResult(this.ResultExceptedFucntionName);
@@ -513,37 +515,37 @@ function CompilerClass(machine)
 
     this.code = [];
     this.address = 0;
-    this.callsTable = [];
-    this.functionsTable = [];
+    this.callTable = [];
+    this.functionAddressTable = [];
+    this.addressFunctionTable = [];
 
     this.machine.unSet();
 
-    this.addToCode('call');
-    this.addToCallsTable('main', this.addToCode(-1), undefined, undefined);
-    this.addToCode('stop');
+    this.addToCode(this.machine.CodeCall);
+    this.addTocallTable('main', this.addToCode(-1), undefined, undefined);
+    this.addToCode(this.machine.CodeStop);
 
     this.loadLexeme();
     var result = this.parserProgram();
     if(result !== true)
       return result;
 
-    for(var i = 0; i < this.callsTable.length; i++)
+    for(var i = 0; i < this.callTable.length; i++)
     {
-      var address = this.functionsTable[this.callsTable[i].name];
-      if(address === undefined)
+      if(Object.keys(this.functionAddressTable).indexOf(this.callTable[i].name) < 0)
       {
-        var returnValue = this.ResultExceptedUndefinedFunction.replace('{}', this.callsTable[i].name);
+        var returnValue = this.ResultExceptedUndefinedFunction.replace('{}', this.callTable[i].name);
         if
         (
-          this.callsTable[i].lexemeLine !== undefined &&
-          this.callsTable[i].lexemeColumn !== undefined
+          this.callTable[i].lexemeLine !== undefined &&
+          this.callTable[i].lexemeColumn !== undefined
         )
-          returnValue += ' at '+this.callsTable[i].line+':'+this.callsTable[i].column;
+          returnValue += ' at '+this.callTable[i].line+':'+this.callTable[i].column;
         return returnValue;
       }
-      this.code[this.callsTable[i].address] = address;
+      this.code[this.callTable[i].address] = this.functionAddressTable[this.callTable[i].name];
     }
-    this.machine.set(this.code, this.functionsTable);
+    this.machine.set(this.code, this.addressFunctionTable);
     return true;
   };
 }
