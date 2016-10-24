@@ -1,1 +1,55 @@
-{"program":"fill_helper()\n{\n  if(!wall)\n  {\n    move;\n    fill_restrict();\n    move;\n    left;\n    left;\n  }\n}\n\nfill_restrict()\n{\n  if(find)\n  {\n    left;\n    left;\n    return;\n  }\n  if(!have)\n  {\n    left;\n    left;\n    return;\n  }\n  put;\n  left;\n  left;\n  left;\n  repeat(3)\n  {\n    fill_helper();\n    left;\n  }\n}\n\nfill()\n{\n  if(find)\n    return;\n  if(!have)\n    return;\n  put;\n  repeat(4)\n  {\n    fill_helper();\n    left;\n  }\n}\n\nmain()\n{\n  fill();\n}","world":{"beepersNumber":[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],"wallsNorthSouth":[[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true],[true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true],[true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true],[true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true],[true,true,true,true,false,false,false,false,false,false,false,false,false,false,true,true,true,true,true],[true,true,true,true,true,false,false,false,false,false,false,false,false,true,true,true,true,true,true],[true,true,true,true,true,true,false,false,false,false,false,false,true,true,true,true,true,true,true],[true,true,true,true,true,true,true,false,false,false,false,true,true,true,true,true,true,true,true],[true,true,true,true,true,true,true,true,false,false,true,true,true,true,true,true,true,true,true],[true,true,true,true,true,true,true,true,true,false,true,true,true,true,true,true,true,true,true],[true,true,true,true,true,true,true,true,false,false,false,true,true,true,true,true,true,true,true],[true,true,true,true,true,true,true,false,false,false,false,false,true,true,true,true,true,true,true],[true,true,true,true,true,true,false,false,false,false,false,false,false,true,true,true,true,true,true],[true,true,true,true,true,false,false,false,false,false,false,false,false,false,true,true,true,true,true],[true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true],[true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true],[true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true],[true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true],[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]],"wallsEastWest":[[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false],[false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,false],[false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false],[false,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,false],[false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,false,false,false,false,false],[false,false,false,false,false,true,true,true,true,true,true,true,true,true,false,false,false,false,false,false],[false,false,false,false,false,false,true,true,true,true,true,true,true,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,true,true,true,true,true,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,true,false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,true,true,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,true,true,true,true,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,true,true,true,true,true,true,false,false,false,false,false,false,false],[false,false,false,false,false,false,true,true,true,true,true,true,true,true,false,false,false,false,false,false],[false,false,false,false,false,true,true,true,true,true,true,true,true,true,true,false,false,false,false,false],[false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,false],[false,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false],[false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,false],[false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false]],"karelX":0,"karelY":0,"karelDirection":0,"karelBeepersNumber":400}}
+fill_helper()
+{
+  if(!wall)
+  {
+    move;
+    fill_restrict();
+    move;
+    left;
+    left;
+  }
+}
+
+fill_restrict()
+{
+  if(find)
+  {
+    left;
+    left;
+    return;
+  }
+  if(!have)
+  {
+    left;
+    left;
+    return;
+  }
+  put;
+  left;
+  left;
+  left;
+  repeat(3)
+  {
+    fill_helper();
+    left;
+  }
+}
+
+fill()
+{
+  if(find)
+    return;
+  if(!have)
+    return;
+  put;
+  repeat(4)
+  {
+    fill_helper();
+    left;
+  }
+}
+
+main()
+{
+  fill();
+}

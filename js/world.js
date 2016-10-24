@@ -484,6 +484,8 @@ function WorldClass(maxX, maxY)
   {
     this.copiedData =
     {
+      'maxX':               this.maxX,
+      'maxY':               this.maxY,
       'beepersNumber':      undefined,
       'wallsNorthSouth':    undefined,
       'wallsEastWest':      undefined,

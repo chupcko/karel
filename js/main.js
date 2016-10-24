@@ -72,63 +72,56 @@ function step()
   Runner.step();
 }
 
-function load()
+function loadProgram()
 {
-  Status.clear();
-  var files = document.getElementById('file').files;
+  var files = document.getElementById('program_file').files;
   if(files.length != 1)
   {
-    Status.setError('First select file');
+    Status.setError('First select program file');
     return;
   }
-  var reader = new FileReader();
-  reader.onerror = function(event)
-  {
-    Status.setError('Error in loading');
-  };
-  reader.onload = function(event)
-  {
-    Filer.load(reader.result);
-  };
-  reader.readAsText(files[0]);
-  document.getElementById('file_name').value = files[0].name;
+  Filer.loadProgram(files)
+  document.getElementById('program_file_name').value = files[0].name;
 }
 
-function save()
+function loadWorld()
 {
-  Status.clear();
-  var blob= new Blob([Filer.save()], {type:'text/plain'});
-  var download = document.createElement('a');
-  download.download = document.getElementById('file_name').value;
-  download.innerHTML = '';
-  if(window.URL === undefined)
-    window.URL = window.webkitURL;
-  download.href = window.URL.createObjectURL(blob);
-  download.onclick = function(event)
+  var files = document.getElementById('world_file').files;
+  if(files.length != 1)
   {
-    document.body.removeChild(event.target);
-  };
-  download.style.display = 'none';
-  document.body.appendChild(download);
-  download.click();
-  Status.setMessage('Saved');
+    Status.setError('First select world file');
+    return;
+  }
+  Filer.loadWorld(files)
+  document.getElementById('world_file_name').value = files[0].name;
 }
 
-function get(name)
+function saveProgram()
 {
-  Status.clear();
-  var xhttp = new XMLHttpRequest();
-  xhttp.onerror = function()
-  {
-    Status.setError('Error in get example');
-  };
-  xhttp.onload = function(event)
-  {
-    Filer.load(this.response);
-  };
-  xhttp.open('GET', 'examples/'+name, true);
-  xhttp.send();
-  document.getElementById('file_name').value = name;
+  Filer.saveProgram(document.getElementById('program_file_name').value)
+}
+
+function saveWorld()
+{
+  Filer.saveWorld(document.getElementById('world_file_name').value)
+}
+
+function getProgram(name)
+{
+  Filer.getProgram('examples/'+name+'.kp');
+  document.getElementById('program_file_name').value = name+'.kp';
+}
+
+function getWorld(name)
+{
+  Filer.getWorld('examples/'+name+'.kw');
+  document.getElementById('world_file_name').value = name+'.kw';
+}
+
+function getBoth(name)
+{
+  getProgram(name);
+  getWorld(name);
 }
 
 function compile()
