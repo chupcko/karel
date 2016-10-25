@@ -47,8 +47,6 @@ function StatusClass(settings, containerID)
       );
   };
 
-  this.audioError = new Audio('ogg/error.ogg');
-
   this.clear = function()
   {
     this.timerStop();
@@ -68,6 +66,8 @@ function StatusClass(settings, containerID)
     this.container.innerHTML = '<span class="status_warning">'+text+'</span>';
     this.timerStart();
   };
+
+  this.audioError = new Audio('ogg/error.ogg');
 
   this.setError = function(text)
   {
