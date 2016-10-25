@@ -48,9 +48,9 @@ function MachineViewClass(machine, containerID)
     document.getElementById(this.$name()+'_pc').innerHTML = this.machine.pc;
     document.getElementById(this.$name()+'_stopped').innerHTML = this.machine.stopped;
     if(this.oldPC !== undefined)
-      document.getElementById(this.$name()+'_code_row_'+this.oldPC).className = document.getElementById(this.$name()+'_code_row_'+this.oldPC).className.replace(' machine_view_code_pc_row', '');
+      document.getElementById(this.$name()+'_code_row_'+this.oldPC).className = document.getElementById(this.$name()+'_code_row_'+this.oldPC).className.replace('machine_view_code_pc_row', '');
     if(this.machine.pc !== undefined)
-        document.getElementById(this.$name()+'_code_row_'+this.machine.pc).className += ' machine_view_code_pc_row';
+        document.getElementById(this.$name()+'_code_row_'+this.machine.pc).className += 'machine_view_code_pc_row';
     this.oldPC = this.machine.pc;
 
     document.getElementById(this.$name()+'_stack_size').innerHTML = this.machine.stack.length;

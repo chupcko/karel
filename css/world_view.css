@@ -1,16 +1,24 @@
-.world_view_data
-{
-  font-weight: bold;
-}
-
 .world_view_info
 {
   width: 7em;
 }
 
+.world_view_test
+{
+  font-weight: bold;
+}
+
 .world_view_button_command
 {
   width: 5em;
+}
+
+.world_view_data
+{
+  display: inline-block;
+  font-weight: bold;
+  text-align: right;
+  width: 2em;
 }
 
 .world_view_input

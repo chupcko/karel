@@ -259,10 +259,10 @@ function WorldViewClass(status, world, controllerID, canvasID)
   {
     this.controller.innerHTML =
       '<table><tr>'+
-      '<td class="world_view_info">NORTH: <span id="'+this.$name()+'_north" class="world_view_data"></span></td>'+
-      '<td class="world_view_info">WALL: <span id="'+this.$name()+'_wall" class="world_view_data"></span></td>'+
-      '<td class="world_view_info">HAVE: <span id="'+this.$name()+'_have" class="world_view_data"></span></td>'+
-      '<td class="world_view_info">FIND: <span id="'+this.$name()+'_find" class="world_view_data"></span></td>'+
+      '<td class="world_view_info">NORTH: <span id="'+this.$name()+'_north" class="world_view_test"></span></td>'+
+      '<td class="world_view_info">WALL: <span id="'+this.$name()+'_wall" class="world_view_test"></span></td>'+
+      '<td class="world_view_info">HAVE: <span id="'+this.$name()+'_have" class="world_view_test"></span></td>'+
+      '<td class="world_view_info">FIND: <span id="'+this.$name()+'_find" class="world_view_test"></span></td>'+
       '</tr><tr>'+
       '<td><button type="button" class="world_view_button_command" onclick="'+this.$name()+'.doLeft();">LEFT</button></td>'+
       '<td><button type="button" class="world_view_button_command" onclick="'+this.$name()+'.doMove();">MOVE</button></td>'+
@@ -270,7 +270,7 @@ function WorldViewClass(status, world, controllerID, canvasID)
       '<td><button type="button" class="world_view_button_command" onclick="'+this.$name()+'.doTake();">TAKE</button></td>'+
       '</tr></table><br/>'+
       '<button type="button" onclick="'+this.$name()+'.selectKarelField();">Select Karel field</button><br/>'+
-      'Selected field at (<span id="'+this.$name()+'_selected_x" class="world_view_data"></span>, <span id="'+this.$name()+'_selected_y" class="world_view_data"></span>) '+
+      'Selected field at (<span id="'+this.$name()+'_selected_x" class="world_view_data"></span>,<span id="'+this.$name()+'_selected_y" class="world_view_data"></span>) '+
       'have <input type="text" id="'+this.$name()+'_selected_beepers" class="world_view_input" onchange="'+this.$name()+'.selectedBeepersSet();"/> beeper(s)'+
       '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.selectedBeepersSet();">Set</button>'+
       '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.selectedBeepersSetZero();">=0</button>'+
@@ -278,7 +278,7 @@ function WorldViewClass(status, world, controllerID, canvasID)
       '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.selectedBeepersIncrement();">+1</button><br/>'+
       '<br/>'+
       '<button type="button" onclick="'+this.$name()+'.putKarelOnSelectedField();">Put Karel on selected field</button><br/>'+
-      'Karel at (<span id="'+this.$name()+'_karel_x" class="world_view_data"></span>, <span id="'+this.$name()+'_karel_y" class="world_view_data"></span>) '+
+      'Karel at (<span id="'+this.$name()+'_karel_x" class="world_view_data"></span>,<span id="'+this.$name()+'_karel_y" class="world_view_data"></span>) '+
       'have <input type="text" id="'+this.$name()+'_karel_beepers" class="world_view_input" onchange="'+this.$name()+'.karelBeepersSet();"/> beeper(s)'+
       '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.karelBeepersSet();">Set</button>'+
       '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.karelBeepersSetZero();">=0</button>'+

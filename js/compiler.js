@@ -381,7 +381,7 @@ function CompilerClass(machine)
           return this.makeResult(this.ResultExceptedRightParentheses);
         this.loadLexeme();
         break;
-      case semicolon:
+      case this.LexemeSemicolon:
         break;
       default:
         return this.makeResult(this.ResultExceptedCommand);

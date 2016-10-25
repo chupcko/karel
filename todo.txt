@@ -1,3 +1,2 @@
 -Add statistic of machine
--Fixed width of bold in machine_view
 -Add examples

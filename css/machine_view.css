@@ -3,6 +3,11 @@
   border-collapse: collapse;
 }
 
+.machine_view_code_pc_row
+{
+  background-color: rgb(80%, 80%, 80%);
+}
+
 .machine_view_code_address_cell
 {
   text-align: right;
@@ -13,13 +18,14 @@
   width: 3em;
 }
 
-.machine_view_code_pc_row
+.machine_view_code_pc_row .machine_view_code_code_cell
 {
-  background-color: rgb(80%, 80%, 80%);
+  color: rgb(100%, 0%, 0%);
   font-weight: bold;
 }
 
 .machine_view_data
 {
+  color: rgb(100%, 0%, 0%);
   font-weight: bold;
 }
