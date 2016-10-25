@@ -8,22 +8,25 @@
     <link rel="stylesheet" type="text/css" href="css/status.css"/>
     <link rel="stylesheet" type="text/css" href="css/file.css"/>
     <link rel="stylesheet" type="text/css" href="css/settings_view.css"/>
-    <link rel="stylesheet" type="text/css" href="css/machine_view.css"/>
     <link rel="stylesheet" type="text/css" href="css/world_view.css"/>
+    <link rel="stylesheet" type="text/css" href="css/statistics_view.css"/>
+    <link rel="stylesheet" type="text/css" href="css/machine_view.css"/>
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
     <style type="text/css">
       /*<![CDATA[*/
       /*]]>*/
     </style>
     <script src="js/tab.js"></script>
-    <script src="js/status.js"></script>
     <script src="js/settings.js"></script>
+    <script src="js/status.js"></script>
+    <script src="js/world.js"></script>
+    <script src="js/statistics.js"></script>
     <script src="js/machine.js"></script>
     <script src="js/compiler.js"></script>
-    <script src="js/world.js"></script>
     <script src="js/settings_view.js"></script>
-    <script src="js/machine_view.js"></script>
     <script src="js/world_view.js"></script>
+    <script src="js/statistics_view.js"></script>
+    <script src="js/machine_view.js"></script>
     <script src="js/filer.js"></script>
     <script src="js/runner.js"></script>
     <script src="js/main.js"></script>
@@ -39,6 +42,7 @@
       <li><a href="javascript:tabNothing();" class="tab_link" onclick="tabOpen(event, 'tab_file');">File</a></li>
       <li><a href="javascript:tabNothing();" class="tab_link" onclick="tabOpen(event, 'tab_program');">Program</a></li>
       <li><a href="javascript:tabNothing();" class="tab_link" onclick="tabOpen(event, 'tab_world');">World</a></li>
+      <li><a href="javascript:tabNothing();" class="tab_link" onclick="tabOpen(event, 'tab_statistics');">Statistics</a></li>
       <li><a href="javascript:tabNothing();" class="tab_link" onclick="tabOpen(event, 'tab_machine');">Machine</a></li>
       <li class="tab_right"><a href="javascript:tabNothing();" class="tab_link" onclick="step();">Step</a></li>
       <li class="tab_right"><a href="javascript:tabNothing();" class="tab_link" onclick="runStop();">Run/Stop</a></li>
@@ -121,6 +125,7 @@ main()
       <div class="left"><canvas id="world_canvas"></canvas></div>
       <div id="world_controller" class="left"></div>
     </div>
+    <div id="tab_statistics" class="tab_content"></div>
     <div id="tab_machine" class="tab_content"></div>
   </body>
 </html>

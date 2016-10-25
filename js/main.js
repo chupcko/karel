@@ -31,6 +31,7 @@ var WorldDimX = 20;
 var WorldDimY = 20;
 var World = undefined;
 
+var Statistics = undefined;
 var Machine = undefined;
 var Compiler = undefined;
 
@@ -46,19 +47,22 @@ function main()
   Settings = new SettingsClass();
   Status = new StatusClass(Settings, 'status');
   World = new WorldClass(WorldDimX, WorldDimY);
-  Machine = new MachineClass(World);
+  Statistics = new StatisticsClass();
+  Machine = new MachineClass(World, Statistics);
   Compiler = new CompilerClass(Machine);
   SettingsView = new SettingsViewClass(Settings, 'tab_settings');
   WorldView = new WorldViewClass(Status, World, 'world_controller', 'world_canvas');
+  StatisticsView = new StatisticsViewClass(Statistics, 'tab_statistics');
   MachineView = new MachineViewClass(Machine, 'tab_machine');
   Filer = new FilerClass(Status, 'program', World, Machine, WorldView, MachineView);
-  Runner = new RunnerClass(Settings, Status, Machine, WorldView, MachineView);
+  Runner = new RunnerClass(Settings, Status, Machine, WorldView, StatisticsView, MachineView);
 }
 
 function reset()
 {
   Status.clear();
   Machine.reset();
+  StatisticsView.draw();
   MachineView.draw();
 }
 

@@ -2,6 +2,7 @@ function MachineViewClass(machine, containerID)
 {
   this.machine = machine;
   this.container = document.getElementById(containerID);
+
   this.oldPC = undefined;
 
   this.init = function()

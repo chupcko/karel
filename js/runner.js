@@ -1,9 +1,10 @@
-function RunnerClass(settings, status, machine, worldView, machineView)
+function RunnerClass(settings, status, machine, worldView, statisticsView, machineView)
 {
   this.settings = settings;
   this.status = status;
   this.machine = machine;
   this.worldView = worldView;
+  this.statisticsView = statisticsView;
   this.machineView = machineView;
 
   this.do = function()
@@ -14,6 +15,7 @@ function RunnerClass(settings, status, machine, worldView, machineView)
     else if(result !== true)
       status.setError(result);
     worldView.draw();
+    statisticsView.draw();
     machineView.draw();
   };
 

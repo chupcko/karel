@@ -1,6 +1,7 @@
-function MachineClass(world)
+function MachineClass(world, statistics)
 {
   this.world = world;
+  this.statistics = statistics;
 
   this.code = undefined;
   this.addressFunctionTable = undefined;
@@ -56,6 +57,7 @@ function MachineClass(world)
     this.pc = 0;
     this.stack = [];
     this.stopped = false;
+    this.statistics.reset();
   };
 
   this.set = function(code, addressFunctionTable)
@@ -85,6 +87,7 @@ function MachineClass(world)
 
   this.step = function()
   {
+    this.statistics.countTick++;
     if(this.code === undefined)
       return this.stop(this.ResultNoCode);
     if(this.stopped)
@@ -94,20 +97,24 @@ function MachineClass(world)
     switch(this.code[this.pc])
     {
       case this.CodeLeft:
+        this.statistics.countDoLeft++;
         this.world.doLeft();
         this.pc++;
         break;
       case this.CodeMove:
+        this.statistics.countDoMove++;
         if(!this.world.doMove())
           return this.stop(this.ResultCannotMove);
         this.pc++;
         break;
       case this.CodePut:
+        this.statistics.countDoPut++;
         if(!this.world.doPut())
           return this.stop(this.ResultCannotPut);
         this.pc++;
         break;
       case this.CodeTake:
+        this.statistics.countDoTake++;
         if(!this.world.doTake())
           return this.stop(this.ResultCannotTake);
         this.pc++;
@@ -122,6 +129,7 @@ function MachineClass(world)
         this.pc = this.code[this.pc];
         break;
       case this.CodeCall:
+        this.statistics.countCall++;
         this.pc++;
         if(this.pcIsBad())
           return this.stop(this.ResultBadAddress);
@@ -137,6 +145,7 @@ function MachineClass(world)
         this.pc = address.data;
         break;
       case this.CodeBn:
+        this.statistics.countTestNorth++;
         this.pc++;
         if(this.world.conditionNorth())
         {
@@ -148,6 +157,7 @@ function MachineClass(world)
           this.pc++;
         break;
       case this.CodeBw:
+        this.statistics.countTestWall++;
         this.pc++;
         if(this.world.conditionWall())
         {
@@ -159,6 +169,7 @@ function MachineClass(world)
           this.pc++;
         break;
       case this.CodeBh:
+        this.statistics.countTestHave++;
         this.pc++;
         if(this.world.conditionHave())
         {
@@ -170,6 +181,7 @@ function MachineClass(world)
           this.pc++;
         break;
       case this.CodeBf:
+        this.statistics.countTestFind++;
         this.pc++;
         if(this.world.conditionFind())
         {
@@ -181,6 +193,7 @@ function MachineClass(world)
           this.pc++;
         break;
       case this.CodeBnn:
+        this.statistics.countTestNorth++;
         this.pc++;
         if(!this.world.conditionNorth())
         {
@@ -192,6 +205,7 @@ function MachineClass(world)
           this.pc++;
         break;
       case this.CodeBnw:
+        this.statistics.countTestWall++;
         this.pc++;
         if(!this.world.conditionWall())
         {
@@ -203,6 +217,7 @@ function MachineClass(world)
           this.pc++;
         break;
       case this.CodeBnh:
+        this.statistics.countTestHave++;
         this.pc++;
         if(!this.world.conditionHave())
         {
@@ -214,6 +229,7 @@ function MachineClass(world)
           this.pc++;
         break;
       case this.CodeBnf:
+        this.statistics.countTestFind++;
         this.pc++;
         if(!this.world.conditionFind())
         {
