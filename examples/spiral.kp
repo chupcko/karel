@@ -1,3 +1,16 @@
+back()
+{
+  left;
+  left;
+}
+
+right()
+{
+  left;
+  left;
+  left;
+}
+
 fill_helper()
 {
   if(!wall)
@@ -5,8 +18,7 @@ fill_helper()
     move;
     fill_restrict();
     move;
-    left;
-    left;
+    back();
   }
 }
 
@@ -14,20 +26,16 @@ fill_restrict()
 {
   if(find)
   {
-    left;
-    left;
+    back();
     return;
   }
   if(!have)
   {
-    left;
-    left;
+    back();
     return;
   }
   put;
-  left;
-  left;
-  left;
+  right();
   repeat(3)
   {
     fill_helper();

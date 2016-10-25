@@ -1,11 +1,12 @@
-right()
-{
-  repeat(3)
-    left;
-}
-
 back()
 {
+  left;
+  left;
+}
+
+right()
+{
+  left;
   left;
   left;
 }
@@ -41,12 +42,14 @@ take_from_field()
 
 take_from_column()
 {
-  while(!wall)
+  left;
+  loop
   {
     take_from_field();
+    if(wall)
+      break;
     move;
   }
-  take_from_field();
 }
 
 take_all()
@@ -54,14 +57,12 @@ take_all()
   right();
   while(!wall)
   {
-    left;
     take_from_column();
     back();
     go_forward();
     left;
     move;
   }
-  left;
   take_from_column();
 }
 
