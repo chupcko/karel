@@ -17,7 +17,7 @@ function MachineViewClass(machine, containerID)
       text += '<tr id="'+this.$name()+'_code_row_'+i+'"><td class="machine_view_code_address_cell">';
       if(this.machine.addressFunctionTable[i] !== undefined)
         text += '['+this.machine.addressFunctionTable[i]+'] ';
-      text += i+':</td><td class="machine_view_code_code_cell">'+this.machine.code[i]+'</td><td>';
+      text += i+':</td><td class="machine_view_code_code_cell">&nbsp;'+this.machine.code[i]+'</td><td>';
       if(i+1 < this.machine.code.length && typeof this.machine.code[i+1] == 'number')
       {
         var functionName = this.machine.addressFunctionTable[this.machine.code[i+1]];

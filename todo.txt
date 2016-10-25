@@ -1,2 +1,1 @@
 -Add statistic of machine
--Add examples
