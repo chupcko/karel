@@ -12,7 +12,7 @@ function SettingsClass()
   {
     var date = new Date();
     date.setFullYear(date.getFullYear()+this.CookieExpiresAfterYears);
-    document.cookie = name+'='+value+'; expires='+date.toUTCString();
+    document.cookie = name+'='+value+'; expires='+date.toUTCString()+'; path=/';
   };
 
   this.getCookie = function(name)
