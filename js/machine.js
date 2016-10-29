@@ -1,13 +1,14 @@
 function MachineClass(world, statistics)
 {
   this.world = world;
-  this.statistics = statistics;
 
   this.code = undefined;
   this.addressFunctionTable = undefined;
   this.pc = undefined;
   this.stack = undefined;
   this.stopped = undefined;
+
+  this.statistics = new StatisticsClass();
 
   this.ResultBadAddress     = 'Bad address in machine';
   this.ResultBadInstruction = 'Bad instruction in machine';

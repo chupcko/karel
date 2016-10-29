@@ -47,16 +47,15 @@ function main()
   Status = new StatusClass(Settings, 'status');
   World = new WorldClass(WorldDimX, WorldDimY);
   Statistics = new StatisticsClass();
-  Machine = new MachineClass(World, Statistics);
+  Machine = new MachineClass(World);
   Compiler = new CompilerClass(Machine);
 
   SettingsView = new SettingsViewClass(Settings, 'tab_settings');
   WorldView = new WorldViewClass(Status, World, 'world_controller', 'world_canvas');
-  StatisticsView = new StatisticsViewClass(Statistics, 'tab_statistics');
   MachineView = new MachineViewClass(Machine, 'tab_machine');
 
-  Filer = new FilerClass(Status, 'program', World, Machine, Compiler, WorldView, StatisticsView, MachineView);
-  Runner = new RunnerClass(Settings, Status, Machine, WorldView, StatisticsView, MachineView);
+  Filer = new FilerClass(Status, 'program', World, Machine, Compiler, WorldView, MachineView);
+  Runner = new RunnerClass(Settings, Status, Machine, WorldView, MachineView);
 }
 
 function loadProgram()

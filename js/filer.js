@@ -1,4 +1,4 @@
-function FilerClass(status, programID, world, machine, compiler, worldView, statisticsView, machineView)
+function FilerClass(status, programID, world, machine, compiler, worldView, machineView)
 {
   this.status = status;
   this.program = document.getElementById(programID);
@@ -6,7 +6,6 @@ function FilerClass(status, programID, world, machine, compiler, worldView, stat
   this.machine = machine;
   this.compiler = compiler;
   this.worldView = worldView;
-  this.statisticsView = statisticsView;
   this.machineView = machineView;
 
   this.load = function(files, callback)
@@ -57,7 +56,6 @@ function FilerClass(status, programID, world, machine, compiler, worldView, stat
           {
             that.program.value = text;
             that.machine.unSet();
-            that.statisticsView.draw();
             that.machineView.init();
             return true;
           }
@@ -171,7 +169,6 @@ function FilerClass(status, programID, world, machine, compiler, worldView, stat
           {
             that.program.value = text;
             that.machine.unSet();
-            that.statisticsView.draw();
             that.machineView.init();
             return true;
           }
@@ -218,12 +215,10 @@ function FilerClass(status, programID, world, machine, compiler, worldView, stat
     if(result !== true)
     {
       this.status.setError(result);
-      this.statisticsView.draw();
       this.machineView.init();
       return;
     }
     this.status.setMessage('Compiled');
-    this.statisticsView.draw();
     this.machineView.init();
     this.machineView.draw();
   };
