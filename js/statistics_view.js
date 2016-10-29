@@ -17,6 +17,7 @@ function StatisticsViewClass(statistics, containerID)
       '<tr><td>Count of test HAVE</td><td>= <span id="'+this.$name()+'_counterTestHave" class="statistics_view_data"></span></td></tr>'+
       '<tr><td>Count of test FIND</td><td>= <span id="'+this.$name()+'_counterTestFind" class="statistics_view_data"></span></td></tr>'+
       '<tr><td>Count of call</td><td>= <span id="'+this.$name()+'_counterCall" class="statistics_view_data"></span></td></tr>'+
+      '<tr><td>Max stack depth</td><td>= <span id="'+this.$name()+'_maxStackDepth" class="statistics_view_data"></span></td></tr>'+
       '</table>';
   };
 
@@ -32,6 +33,7 @@ function StatisticsViewClass(statistics, containerID)
     document.getElementById(this.$name()+'_counterTestHave').innerHTML = this.statistics.counterTestHave;
     document.getElementById(this.$name()+'_counterTestFind').innerHTML = this.statistics.counterTestFind;
     document.getElementById(this.$name()+'_counterCall').innerHTML = this.statistics.counterCall;
+    document.getElementById(this.$name()+'_maxStackDepth').innerHTML = this.statistics.maxStackDepth;
   };
 
   this.init();

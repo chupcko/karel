@@ -10,6 +10,7 @@ function StatisticsClass()
   this.counterTestHave = undefined;
   this.counterTestFind = undefined;
   this.counterCall = undefined;
+  this.maxStackDepth = undefined;
 
   this.reset = function()
   {
@@ -23,6 +24,12 @@ function StatisticsClass()
     this.counterTestHave = 0;
     this.counterTestFind = 0;
     this.counterCall = 0;
+    this.maxStackDepth = 0;
+  };
+
+  this.newStackDepth = function(value)
+  {
+    this.maxStackDepth = Math.max(this.maxStackDepth, value);
   };
 
   this.reset();

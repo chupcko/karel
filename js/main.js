@@ -24,7 +24,6 @@
 )();
 
 var Settings = undefined;
-
 var Status = undefined;
 
 var WorldDimX = 20;
@@ -50,30 +49,14 @@ function main()
   Statistics = new StatisticsClass();
   Machine = new MachineClass(World, Statistics);
   Compiler = new CompilerClass(Machine);
+
   SettingsView = new SettingsViewClass(Settings, 'tab_settings');
   WorldView = new WorldViewClass(Status, World, 'world_controller', 'world_canvas');
   StatisticsView = new StatisticsViewClass(Statistics, 'tab_statistics');
   MachineView = new MachineViewClass(Machine, 'tab_machine');
-  Filer = new FilerClass(Status, 'program', World, Machine, WorldView, MachineView);
+
+  Filer = new FilerClass(Status, 'program', World, Machine, Compiler, WorldView, StatisticsView, MachineView);
   Runner = new RunnerClass(Settings, Status, Machine, WorldView, StatisticsView, MachineView);
-}
-
-function reset()
-{
-  Status.clear();
-  Machine.reset();
-  StatisticsView.draw();
-  MachineView.draw();
-}
-
-function runStop()
-{
-  Runner.runStop();
-}
-
-function step()
-{
-  Runner.step();
 }
 
 function loadProgram()
@@ -126,19 +109,4 @@ function getBoth(name)
 {
   getProgram(name);
   getWorld(name);
-}
-
-function compile()
-{
-  Status.clear();
-  var result = Compiler.compile(document.getElementById('program').value);
-  if(result !== true)
-  {
-    Status.setError(result);
-    MachineView.init();
-    return;
-  }
-  Status.setMessage('Compiled');
-  MachineView.init();
-  MachineView.draw();
 }

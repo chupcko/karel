@@ -9,11 +9,11 @@ function RunnerClass(settings, status, machine, worldView, statisticsView, machi
 
   this.do = function()
   {
-    var result = machine.step();
+    var result = this.machine.step();
     if(result === false)
-      status.setMessage('Machine stopped');
+      this.status.setMessage('Machine stopped');
     else if(result !== true)
-      status.setError(result);
+      this.status.setError(result);
     worldView.draw();
     statisticsView.draw();
     machineView.draw();
@@ -50,9 +50,17 @@ function RunnerClass(settings, status, machine, worldView, statisticsView, machi
       );
   };
 
+  this.reset = function()
+  {
+    this.status.clear();
+    this.machine.reset();
+    this.statisticsView.draw();
+    this.machineView.draw();
+  };
+
   this.runStop = function()
   {
-    status.clear();
+    this.status.clear();
     if(this.job === undefined)
       this.start();
     else
@@ -61,7 +69,7 @@ function RunnerClass(settings, status, machine, worldView, statisticsView, machi
 
   this.step = function()
   {
-    status.clear();
+    this.status.clear();
     if(this.job === undefined)
       this.do();
   };

@@ -1,1 +1,2 @@
+-Load treba da promeni i maxX i maxY, takodje world_wiew treba ponovo inicijalizrati
 -Documentation

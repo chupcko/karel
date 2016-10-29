@@ -547,14 +547,14 @@ function WorldViewClass(status, world, controllerID, canvasID)
 
   this.doLeft = function()
   {
-    status.clear();
+    this.status.clear();
     this.world.doLeft();
     this.draw();
   };
 
   this.doMove = function()
   {
-    status.clear();
+    this.status.clear();
     if(this.world.doMove())
       this.draw();
     else
@@ -563,7 +563,7 @@ function WorldViewClass(status, world, controllerID, canvasID)
 
   this.doPut = function()
   {
-    status.clear();
+    this.status.clear();
     if(this.world.doPut())
       this.draw();
     else
@@ -572,7 +572,7 @@ function WorldViewClass(status, world, controllerID, canvasID)
 
   this.doTake = function()
   {
-    status.clear();
+    this.status.clear();
     if(this.world.doTake())
       this.draw();
     else
