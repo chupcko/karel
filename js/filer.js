@@ -86,6 +86,7 @@ function FilerClass(status, programID, world, machine, compiler, worldView, mach
             var result = that.world.load(data);
             if(result !== true)
               return 'Bad world file format: '+result;
+            that.worldView.initCanvas();
             that.worldView.draw();
             return true;
           }
@@ -199,6 +200,7 @@ function FilerClass(status, programID, world, machine, compiler, worldView, mach
             var result = that.world.load(data);
             if(result !== true)
               return 'Bad world file format: '+result;
+            that.worldView.initCanvas();
             that.worldView.draw();
             return true;
           }

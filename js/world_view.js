@@ -4,8 +4,8 @@ function WorldViewClass(status, world, controllerID, canvasID)
   this.world = world;
   this.controller = document.getElementById(controllerID);
 
-  this.selectedX = 0;
-  this.selectedY = 0;
+  this.selectedX = undefined;
+  this.selectedY = undefined;
 
   this.wallAddendum = 1;
   this.lineWidth = 1;
@@ -25,13 +25,12 @@ function WorldViewClass(status, world, controllerID, canvasID)
 
   this.wallWidth = this.wallAddendum+this.lineWidth+this.wallAddendum;
   this.periodicSize = this.lineWidth+this.fieldSize;
-  this.fieldsWidth = this.wallAddendum+this.world.maxX*this.periodicSize+this.lineWidth+this.wallAddendum;
-  this.fieldsHeight = this.wallAddendum+this.world.maxY*this.periodicSize+this.lineWidth+this.wallAddendum;
+
+  this.fieldsWidth = undefined;
+  this.fieldsHeight = undefined;
 
   this.canvas = document.getElementById(canvasID);
   this.canvasContext = this.canvas.getContext('2d');
-  this.canvas.width = this.fieldsWidth;
-  this.canvas.height = this.fieldsHeight;
   this.canvas.addEventListener
   (
     'click',
@@ -255,10 +254,20 @@ function WorldViewClass(status, world, controllerID, canvasID)
     }
   };
 
+  this.initCanvas = function()
+  {
+    this.selectedX = 0;
+    this.selectedY = 0;
+    this.fieldsWidth = this.wallAddendum+this.world.maxX*this.periodicSize+this.lineWidth+this.wallAddendum;
+    this.fieldsHeight = this.wallAddendum+this.world.maxY*this.periodicSize+this.lineWidth+this.wallAddendum;
+    this.canvas.width = this.fieldsWidth;
+    this.canvas.height = this.fieldsHeight;
+  };
+
   this.initController = function()
   {
     this.controller.innerHTML =
-      '<table><tr>'+
+      '<table class="border_collapse"><tr>'+
       '<td class="world_view_info">NORTH: <span id="'+this.$name()+'_north" class="world_view_test"></span></td>'+
       '<td class="world_view_info">WALL: <span id="'+this.$name()+'_wall" class="world_view_test"></span></td>'+
       '<td class="world_view_info">HAVE: <span id="'+this.$name()+'_have" class="world_view_test"></span></td>'+
@@ -285,9 +294,13 @@ function WorldViewClass(status, world, controllerID, canvasID)
       '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.karelBeepersDecrement();">-1</button>'+
       '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.karelBeepersIncrement();">+1</button><br/>'+
       '<br/>'+
-      '<button type="button" onclick="'+this.$name()+'.resetWorld();">Reset world</button>&nbsp;&nbsp;'+
-      '<button type="button" onclick="'+this.$name()+'.storeWorld();">Store world</button>&nbsp;&nbsp;'+
-      '<button type="button" onclick="'+this.$name()+'.restoreWorld();">Restore world</button>&nbsp;&nbsp;';
+      'X: <input type="text" id="'+this.$name()+'_maxX" class="world_view_input" onchange="'+this.$name()+'.changeMaxDimensions();"/>'+
+      'Y: <input type="text" id="'+this.$name()+'_maxY" class="world_view_input" onchange="'+this.$name()+'.changeMaxDimensions();"/>'+
+      '<button type="button" onclick="'+this.$name()+'.changeMaxDimensions();">Change Dimensions</button>&nbsp;&nbsp;'+
+      '<button type="button" onclick="'+this.$name()+'.resetWorld();">Reset world</button><br/>'+
+      '<br/>'+
+      '<button type="button" onclick="'+this.$name()+'.storeWorld();">Store world to memory</button>&nbsp;&nbsp;'+
+      '<button type="button" onclick="'+this.$name()+'.restoreWorld();">Restore world from memory</button>&nbsp;&nbsp;';
   };
 
   this.drawController = function()
@@ -302,6 +315,8 @@ function WorldViewClass(status, world, controllerID, canvasID)
     document.getElementById(this.$name()+'_karel_x').innerHTML = this.world.karelX;
     document.getElementById(this.$name()+'_karel_y').innerHTML = this.world.karelY;
     document.getElementById(this.$name()+'_karel_beepers').value = this.world.karelBeepersNumber;
+    document.getElementById(this.$name()+'_maxX').value = this.world.maxX;
+    document.getElementById(this.$name()+'_maxY').value = this.world.maxY;
   };
 
   this.drawCanvasSelected = function()
@@ -646,6 +661,15 @@ function WorldViewClass(status, world, controllerID, canvasID)
     this.draw();
   };
 
+  this.changeMaxDimensions = function()
+  {
+    var maxX = parseInt(document.getElementById(this.$name()+'_maxX').value);
+    var maxY = parseInt(document.getElementById(this.$name()+'_maxY').value);
+    this.world.changeMaxDimensions(maxX, maxY);
+    this.initCanvas();
+    this.draw();
+  };
+
   this.resetWorld = function()
   {
     this.world.reset();
@@ -664,6 +688,7 @@ function WorldViewClass(status, world, controllerID, canvasID)
     this.draw();
   };
 
+  this.initCanvas();
   this.initController();
   this.draw();
 }
