@@ -26,8 +26,8 @@
 var Settings = undefined;
 var Status = undefined;
 
-var WorldDimX = 20;
-var WorldDimY = 20;
+var WorldDimensionX = 20;
+var WorldDimensionY = 20;
 var World = undefined;
 
 var Machine = undefined;
@@ -44,7 +44,7 @@ function main()
 {
   Settings = new SettingsClass();
   Status = new StatusClass(Settings, 'status');
-  World = new WorldClass(WorldDimX, WorldDimY);
+  World = new WorldClass(WorldDimensionX, WorldDimensionY);
   Machine = new MachineClass(World);
   Compiler = new CompilerClass(Machine);
 

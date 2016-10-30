@@ -1,7 +1,7 @@
-function WorldClass(maxX, maxY)
+function WorldClass(dimensionX, dimensionY)
 {
-  this.maxX = undefined;
-  this.maxY = undefined;
+  this.dimensionX = undefined;
+  this.dimensionY = undefined;
 
   this.beepersNumber = undefined;
   this.wallsNorthSouth = undefined;
@@ -24,24 +24,24 @@ function WorldClass(maxX, maxY)
   this.reset = function()
   {
     this.beepersNumber = new Array();
-    for(var x = 0; x < this.maxX; x++)
+    for(var x = 0; x < this.dimensionX; x++)
     {
       this.beepersNumber[x] = new Array();
-      for(var y = 0; y < this.maxY; y++)
+      for(var y = 0; y < this.dimensionY; y++)
         this.beepersNumber[x][y] = 0;
     }
     this.wallsNorthSouth = new Array();
-    for(var x = 0; x < this.maxX; x++)
+    for(var x = 0; x < this.dimensionX; x++)
     {
       this.wallsNorthSouth[x] = new Array();
-      for(var y = 0; y < this.maxY-1; y++)
+      for(var y = 0; y < this.dimensionY-1; y++)
         this.wallsNorthSouth[x][y] = false;
     }
     this.wallsEastWest = new Array();
-    for(var x = 0; x < this.maxX-1; x++)
+    for(var x = 0; x < this.dimensionX-1; x++)
     {
       this.wallsEastWest[x] = new Array();
-      for(var y = 0; y < this.maxY; y++)
+      for(var y = 0; y < this.dimensionY; y++)
         this.wallsEastWest[x][y] = false;
     }
     this.karelX = 0;
@@ -50,10 +50,10 @@ function WorldClass(maxX, maxY)
     this.karelBeepersNumber = 0;
   };
 
-  this.changeMaxDimensions = function(maxX, maxY)
+  this.changeDimensions = function(dimensionX, dimensionY)
   {
-    this.maxX = Math.min(Math.max(maxX, this.MinDimension), this.MaxDimension);
-    this.maxY = Math.min(Math.max(maxY, this.MinDimension), this.MaxDimension);
+    this.dimensionX = Math.min(Math.max(dimensionX, this.MinDimension), this.MaxDimension);
+    this.dimensionY = Math.min(Math.max(dimensionY, this.MinDimension), this.MaxDimension);
     this.reset();
     this.copiedData = undefined;
   };
@@ -62,9 +62,9 @@ function WorldClass(maxX, maxY)
   {
     return (
       x >= 0 &&
-      x < this.maxX &&
+      x < this.dimensionX &&
       y >= 0 &&
-      y < this.maxY-1
+      y < this.dimensionY-1
     );
   };
 
@@ -72,9 +72,9 @@ function WorldClass(maxX, maxY)
   {
     return (
       x >= 1 &&
-      x < this.maxX &&
+      x < this.dimensionX &&
       y >= 0 &&
-      y < this.maxY
+      y < this.dimensionY
     );
   };
 
@@ -82,9 +82,9 @@ function WorldClass(maxX, maxY)
   {
     return (
       x >= 0 &&
-      x < this.maxX &&
+      x < this.dimensionX &&
       y >= 1 &&
-      y < this.maxY
+      y < this.dimensionY
     );
   };
 
@@ -92,9 +92,9 @@ function WorldClass(maxX, maxY)
   {
     return (
       x >= 0 &&
-      x < this.maxX-1 &&
+      x < this.dimensionX-1 &&
       y >= 0 &&
-      y < this.maxY
+      y < this.dimensionY
     );
   };
 
@@ -102,9 +102,9 @@ function WorldClass(maxX, maxY)
   {
     return (
       x >= 0 &&
-      x < this.maxX &&
+      x < this.dimensionX &&
       y >= 0 &&
-      y < this.maxY
+      y < this.dimensionY
     );
   };
 
@@ -471,21 +471,21 @@ function WorldClass(maxX, maxY)
 
   this.loadCopiedData = function()
   {
-    this.maxX = this.copiedData.maxX;
-    this.maxY = this.copiedData.maxY;
     if(this.copiedData === undefined)
     {
       this.reset();
       return;
     }
+    this.dimensionX = this.copiedData.dimensionX;
+    this.dimensionY = this.copiedData.dimensionY;
     this.beepersNumber = new Array();
-    for(var x = 0; x < this.maxX; x++)
+    for(var x = 0; x < this.dimensionX; x++)
       this.beepersNumber[x] = this.copiedData.beepersNumber[x].slice();
     this.wallsNorthSouth = new Array();
-    for(var x = 0; x < this.maxX; x++)
+    for(var x = 0; x < this.dimensionX; x++)
       this.wallsNorthSouth[x] = this.copiedData.wallsNorthSouth[x].slice();
     this.wallsEastWest = new Array();
-    for(var x = 0; x < this.maxX-1; x++)
+    for(var x = 0; x < this.dimensionX-1; x++)
       this.wallsEastWest[x] = this.copiedData.wallsEastWest[x].slice();
     this.karelX = this.copiedData.karelX;
     this.karelY = this.copiedData.karelY;
@@ -497,8 +497,8 @@ function WorldClass(maxX, maxY)
   {
     this.copiedData =
     {
-      'maxX':               this.maxX,
-      'maxY':               this.maxY,
+      'dimensionX':         this.dimensionX,
+      'dimensionY':         this.dimensionY,
       'beepersNumber':      undefined,
       'wallsNorthSouth':    undefined,
       'wallsEastWest':      undefined,
@@ -508,43 +508,43 @@ function WorldClass(maxX, maxY)
       'karelBeepersNumber': this.karelBeepersNumber
     };
     this.copiedData.beepersNumber = new Array();
-    for(var x = 0; x < this.maxX; x++)
+    for(var x = 0; x < this.dimensionX; x++)
       this.copiedData.beepersNumber[x] = this.beepersNumber[x].slice();
     this.copiedData.wallsNorthSouth = new Array();
-    for(var x = 0; x < this.maxX; x++)
+    for(var x = 0; x < this.dimensionX; x++)
       this.copiedData.wallsNorthSouth[x] = this.wallsNorthSouth[x].slice();
     this.copiedData.wallsEastWest = new Array();
-    for(var x = 0; x < this.maxX-1; x++)
+    for(var x = 0; x < this.dimensionX-1; x++)
       this.copiedData.wallsEastWest[x] = this.wallsEastWest[x].slice();
   };
 
   this.load = function(data)
   {
-    if(data.hasOwnProperty('maxX') === false)
-      return 'missing maxX';
-    if(typeof data.maxX != 'number')
-      return 'bad maxX';
-    data.maxX |= 0;
-    if(data.maxX < 0)
-      return 'bad maxX value';
+    if(data.hasOwnProperty('dimensionX') === false)
+      return 'missing dimensionX';
+    if(typeof data.dimensionX != 'number')
+      return 'bad dimensionX';
+    data.dimensionX |= 0;
+    if(data.dimensionX < 0)
+      return 'bad dimensionX value';
 
-    if(data.hasOwnProperty('maxY') === false)
-      return 'missing maxY';
-    if(typeof data.maxY != 'number')
-      return 'bad maxY';
-    data.maxY |= 0;
-    if(data.maxY < 0)
-      return 'bad maxY value';
+    if(data.hasOwnProperty('dimensionY') === false)
+      return 'missing dimensionY';
+    if(typeof data.dimensionY != 'number')
+      return 'bad dimensionY';
+    data.dimensionY |= 0;
+    if(data.dimensionY < 0)
+      return 'bad dimensionY value';
 
     if(data.hasOwnProperty('beepersNumber') === false)
       return 'missing beepersNumber';
-    if(Array.isArray(data.beepersNumber) !== true && data.beepersNumber.length != data.maxX)
+    if(Array.isArray(data.beepersNumber) !== true && data.beepersNumber.length != data.dimensionX)
       return 'bad beepersNumber';
-    for(var x = 0; x < data.maxX; x++)
+    for(var x = 0; x < data.dimensionX; x++)
     {
-      if(Array.isArray(data.beepersNumber[x]) !== true && data.beepersNumber[x].length != data.maxY)
+      if(Array.isArray(data.beepersNumber[x]) !== true && data.beepersNumber[x].length != data.dimensionY)
         return 'bad beepersNumber element';
-      for(var y = 0; y < data.maxY; y++)
+      for(var y = 0; y < data.dimensionY; y++)
       {
         if(typeof data.beepersNumber[x][y] != 'number')
           return 'bad beepersNumber item';
@@ -556,26 +556,26 @@ function WorldClass(maxX, maxY)
 
     if(data.hasOwnProperty('wallsNorthSouth') === false)
       return 'missing wallsNorthSouth';
-    if(Array.isArray(data.wallsNorthSouth) !== true && data.wallsNorthSouth.length != data.maxX)
+    if(Array.isArray(data.wallsNorthSouth) !== true && data.wallsNorthSouth.length != data.dimensionX)
       return 'bad wallsNorthSouth';
-    for(var x = 0; x < data.maxX; x++)
+    for(var x = 0; x < data.dimensionX; x++)
     {
-      if(Array.isArray(data.wallsNorthSouth[x]) !== true && data.beepersNumber[x].length != data.maxY-1)
+      if(Array.isArray(data.wallsNorthSouth[x]) !== true && data.beepersNumber[x].length != data.dimensionY-1)
         return 'bad wallsNorthSouth element';
-      for(var y = 0; y < data.maxY-1; y++)
+      for(var y = 0; y < data.dimensionY-1; y++)
         if(typeof data.wallsNorthSouth[x][y] != 'boolean')
           return 'bad wallsNorthSouth item';
     }
 
     if(data.hasOwnProperty('wallsEastWest') === false)
       return 'missing wallsEastWest';
-    if(Array.isArray(data.wallsEastWest) !== true && data.wallsEastWest.length != data.maxX-1)
+    if(Array.isArray(data.wallsEastWest) !== true && data.wallsEastWest.length != data.dimensionX-1)
       return 'bad wallsEastWest';
-    for(var x = 0; x < data.maxX-1; x++)
+    for(var x = 0; x < data.dimensionX-1; x++)
     {
-      if(Array.isArray(data.wallsEastWest[x]) !== true && data.wallsEastWest[x].length != data.maxY)
+      if(Array.isArray(data.wallsEastWest[x]) !== true && data.wallsEastWest[x].length != data.dimensionY)
         return 'bad wallsEastWest element';
-      for(var y = 0; y < data.maxY; y++)
+      for(var y = 0; y < data.dimensionY; y++)
         if(typeof data.wallsEastWest[x][y] != 'boolean')
           return 'bad wallsEastWest item';
     }
@@ -585,7 +585,7 @@ function WorldClass(maxX, maxY)
     if(typeof data.karelX != 'number')
       return 'bad karelX';
     data.karelX |= 0;
-    if(data.karelX < 0 || data.karelX >= data.maxX)
+    if(data.karelX < 0 || data.karelX >= data.dimensionX)
       return 'bad karelX value';
 
     if(data.hasOwnProperty('karelY') === false)
@@ -593,7 +593,7 @@ function WorldClass(maxX, maxY)
     if(typeof data.karelX != 'number')
       return 'bad karelY';
     data.karelY |= 0;
-    if(data.karelY < 0 || data.karelY >= data.maxY)
+    if(data.karelY < 0 || data.karelY >= data.dimensionY)
       return 'bad karelY value';
 
     if(data.hasOwnProperty('karelDirection') === false)
@@ -629,5 +629,5 @@ function WorldClass(maxX, maxY)
     return this.copiedData;
   };
 
-  this.changeMaxDimensions(maxX, maxY);
+  this.changeDimensions(dimensionX, dimensionY);
 }
