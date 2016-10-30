@@ -1,1 +1,3 @@
+-filer_view
+-world_view generisi u clasi glavni html
 -Documentation

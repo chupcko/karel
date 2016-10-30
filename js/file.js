@@ -1,4 +1,4 @@
-function FilerClass(status, programID, world, machine, compiler, worldView, machineView)
+function FileClass(status, programID, world, machine, compiler, worldView, machineView)
 {
   this.status = status;
   this.program = document.getElementById(programID);
@@ -44,58 +44,6 @@ function FilerClass(status, programID, world, machine, compiler, worldView, mach
     reader.readAsText(files[0]);
   };
 
-  this.loadProgram = function(files)
-  {
-    this.load
-    (
-      files,
-      (
-        function(that)
-        {
-          return function(text)
-          {
-            that.program.value = text;
-            that.machine.unSet();
-            that.machineView.init();
-            return true;
-          }
-        }
-      )(this)
-    );
-  };
-
-  this.loadWorld = function(files)
-  {
-    this.load
-    (
-      files,
-      (
-        function(that)
-        {
-          return function(text)
-          {
-            var data;
-            try
-            {
-              data = JSON.parse(text);
-            }
-            catch(error)
-            {
-              return 'Bad world file format';
-            }
-            var result = that.world.load(data);
-            if(result !== true)
-              return 'Bad world file format: '+result;
-            that.worldView.initCanvas();
-            that.worldView.draw();
-            return true;
-          }
-        }
-      )
-      (this)
-    );
-  };
-
   this.save = function(name, content)
   {
     this.status.clear();
@@ -114,16 +62,6 @@ function FilerClass(status, programID, world, machine, compiler, worldView, mach
     document.body.appendChild(download);
     download.click();
     this.status.setMessage('Saved');
-  };
-
-  this.saveProgram = function(name)
-  {
-    this.save(name, this.program.value);
-  };
-
-  this.saveWorld = function(name)
-  {
-    this.save(name, JSON.stringify(world.save()));
   };
 
   this.get = function(url, callback)
@@ -158,56 +96,73 @@ function FilerClass(status, programID, world, machine, compiler, worldView, mach
     xhttp.send();
   };
 
+  this.programCallback =
+  (
+    function(that)
+    {
+      return function(text)
+      {
+        that.program.value = text;
+        that.machine.unSet();
+        that.machineView.init();
+        return true;
+      }
+    }
+  )(this);
+
+  this.worldCallback =
+  (
+    function(that)
+    {
+      return function(text)
+      {
+        var data;
+        try
+        {
+          data = JSON.parse(text);
+        }
+        catch(error)
+        {
+          return 'Bad world file format';
+        }
+        var result = that.world.load(data);
+        if(result !== true)
+          return 'Bad world file format: '+result;
+        that.worldView.initCanvas();
+        that.worldView.draw();
+        return true;
+      }
+    }
+  )(this);
+
+  this.loadProgram = function(files)
+  {
+    this.load(files, this.programCallback);
+  };
+
+  this.loadWorld = function(files)
+  {
+    this.load(files, this.worldCallback);
+  };
+
+  this.saveProgram = function(name)
+  {
+    this.save(name, this.program.value);
+  };
+
+  this.saveWorld = function(name)
+  {
+    this.save(name, JSON.stringify(world.save()));
+  };
+
   this.getProgram = function(url)
   {
-    this.get
-    (
-      url,
-      (
-        function(that)
-        {
-          return function(text)
-          {
-            that.program.value = text;
-            that.machine.unSet();
-            that.machineView.init();
-            return true;
-          }
-        }
-      )(this)
-    );
+    this.get(url, this.programCallback);
   };
 
   this.getWorld = function(url)
   {
-    this.get
-    (
-      url,
-      (
-        function(that)
-        {
-          return function(text)
-          {
-            var data;
-            try
-            {
-              data = JSON.parse(text);
-            }
-            catch(error)
-            {
-              return 'Bad world file format';
-            }
-            var result = that.world.load(data);
-            if(result !== true)
-              return 'Bad world file format: '+result;
-            that.worldView.initCanvas();
-            that.worldView.draw();
-            return true;
-          }
-        }
-      )
-      (this)
-    );
+    this.get(url, this.worldCallback);
   };
 
   this.compile = function()

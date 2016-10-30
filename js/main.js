@@ -37,7 +37,7 @@ var SettingsView = undefined;
 var WorldView = undefined;
 var MachineView = undefined;
 
-var Filer = undefined;
+var File = undefined;
 var Runner = undefined;
 
 function main()
@@ -52,7 +52,8 @@ function main()
   WorldView = new WorldViewClass(Status, World, 'world_controller', 'world_canvas');
   MachineView = new MachineViewClass(Machine, 'tab_machine');
 
-  Filer = new FilerClass(Status, 'program', World, Machine, Compiler, WorldView, MachineView);
+  File = new FileClass(Status, 'program', World, Machine, Compiler, WorldView, MachineView);
+  FileView = new FileViewClass(Status, File, 'tab_file');
   Runner = new RunnerClass(Settings, Status, Machine, WorldView, MachineView);
 }
 
@@ -64,7 +65,7 @@ function loadProgram()
     Status.setError('First select program file');
     return;
   }
-  Filer.loadProgram(files)
+  File.loadProgram(files)
   document.getElementById('program_file_name').value = files[0].name;
 }
 
@@ -76,29 +77,29 @@ function loadWorld()
     Status.setError('First select world file');
     return;
   }
-  Filer.loadWorld(files)
+  File.loadWorld(files)
   document.getElementById('world_file_name').value = files[0].name;
 }
 
 function saveProgram()
 {
-  Filer.saveProgram(document.getElementById('program_file_name').value)
+  File.saveProgram(document.getElementById('program_file_name').value)
 }
 
 function saveWorld()
 {
-  Filer.saveWorld(document.getElementById('world_file_name').value)
+  File.saveWorld(document.getElementById('world_file_name').value)
 }
 
 function getProgram(name)
 {
-  Filer.getProgram('examples/'+name+'.kp');
+  File.getProgram('examples/'+name+'.kp');
   document.getElementById('program_file_name').value = name+'.kp';
 }
 
 function getWorld(name)
 {
-  Filer.getWorld('examples/'+name+'.kw');
+  File.getWorld('examples/'+name+'.kw');
   document.getElementById('world_file_name').value = name+'.kw';
 }
 

@@ -6,8 +6,8 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <link rel="stylesheet" type="text/css" href="css/tab.css"/>
     <link rel="stylesheet" type="text/css" href="css/status.css"/>
-    <link rel="stylesheet" type="text/css" href="css/file.css"/>
     <link rel="stylesheet" type="text/css" href="css/settings_view.css"/>
+    <link rel="stylesheet" type="text/css" href="css/file_view.css"/>
     <link rel="stylesheet" type="text/css" href="css/world_view.css"/>
     <link rel="stylesheet" type="text/css" href="css/machine_view.css"/>
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
@@ -25,8 +25,9 @@
     <script src="js/settings_view.js"></script>
     <script src="js/world_view.js"></script>
     <script src="js/machine_view.js"></script>
-    <script src="js/filer.js"></script>
     <script src="js/runner.js"></script>
+    <script src="js/file.js"></script>
+    <script src="js/file_view.js"></script>
     <script src="js/main.js"></script>
     <script type="text/javascript">
       /*<![CDATA[*/
@@ -67,10 +68,10 @@
     </div>
     <div id="tab_settings" class="tab_content"></div>
     <div id="tab_file" class="tab_content">
-      <button type="button" class="file_button" onclick="loadProgram();">Load program</button><input type="file" id="program_file"/><br/>
-      <button type="button" class="file_button" onclick="loadWorld();">Load world</button><input type="file" id="world_file"/><br/>
-      <button type="button" class="file_button" onclick="saveProgram();">Save program</button><input type="text" id="program_file_name" value="name.kp"/><br/>
-      <button type="button" class="file_button" onclick="saveWorld();">Save world</button><input type="text" id="world_file_name" value="name.kw"/><br/>
+      <button type="button" class="file_view_button" onclick="loadProgram();">Load program</button><input type="file" id="program_file"/><br/>
+      <button type="button" class="file_view_button" onclick="loadWorld();">Load world</button><input type="file" id="world_file"/><br/>
+      <button type="button" class="file_view_button" onclick="saveProgram();">Save program</button><input type="text" id="program_file_name" value="name.kp"/><br/>
+      <button type="button" class="file_view_button" onclick="saveWorld();">Save world</button><input type="text" id="world_file_name" value="name.kw"/><br/>
       <p/>
       Examples:
       <table class="border_collapse">
@@ -113,7 +114,7 @@
       </table>
     </div>
     <div id="tab_program" class="tab_content">
-      <button type="button" onclick="Filer.compile();">Compile</button><br/>
+      <button type="button" onclick="File.compile();">Compile</button><br/>
       <textarea rows="40" cols="120" id="program">
 main()
 {

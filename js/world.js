@@ -14,7 +14,7 @@ function WorldClass(dimensionX, dimensionY)
   this.copiedData = undefined;
 
   this.MinDimension = 1;
-  this.MaxDimension = 100;
+  this.MaxDimension = 50;
 
   this.DirectionNorth = 0;
   this.DirectionWest  = 1;
