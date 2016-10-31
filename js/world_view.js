@@ -1,8 +1,8 @@
-function WorldViewClass(status, world, controllerID, canvasID)
+function WorldViewClass(status, world, containerID)
 {
   this.status = status;
   this.world = world;
-  this.controller = document.getElementById(controllerID);
+  this.container = document.getElementById(containerID);
 
   this.selectedX = undefined;
   this.selectedY = undefined;
@@ -29,78 +29,131 @@ function WorldViewClass(status, world, controllerID, canvasID)
   this.fieldsWidth = undefined;
   this.fieldsHeight = undefined;
 
-  this.canvas = document.getElementById(canvasID);
-  this.canvasContext = this.canvas.getContext('2d');
-  this.canvas.addEventListener
-  (
-    'click',
+  this.canvas = undefined;
+  this.canvasContext = undefined;
+
+  this.init = function()
+  {
+    this.container.innerHTML =
+      '<div class="overflow"><div class="left_div"><canvas id="'+this.$name()+'_canvas"></canvas></div><div class="left_div">'+
+      '<table class="border_collapse"><tr>'+
+      '<td class="world_view_info">NORTH: <span id="'+this.$name()+'_north" class="world_view_test"></span></td>'+
+      '<td class="world_view_info">WALL: <span id="'+this.$name()+'_wall" class="world_view_test"></span></td>'+
+      '<td class="world_view_info">HAVE: <span id="'+this.$name()+'_have" class="world_view_test"></span></td>'+
+      '<td class="world_view_info">FIND: <span id="'+this.$name()+'_find" class="world_view_test"></span></td>'+
+      '</tr><tr>'+
+      '<td><button type="button" class="world_view_button_command" onclick="'+this.$name()+'.doLeft();">LEFT</button></td>'+
+      '<td><button type="button" class="world_view_button_command" onclick="'+this.$name()+'.doMove();">MOVE</button></td>'+
+      '<td><button type="button" class="world_view_button_command" onclick="'+this.$name()+'.doPut();">PUT</button></td>'+
+      '<td><button type="button" class="world_view_button_command" onclick="'+this.$name()+'.doTake();">TAKE</button></td>'+
+      '</tr></table><br/>'+
+      '<button type="button" onclick="'+this.$name()+'.selectKarelField();">Select Karel field</button><br/>'+
+      'Selected field at (<span id="'+this.$name()+'_selected_x" class="world_view_data"></span>,<span id="'+this.$name()+'_selected_y" class="world_view_data"></span>) '+
+      'have <input type="text" id="'+this.$name()+'_selected_beepers" class="world_view_input" onchange="'+this.$name()+'.selectedBeepersSet();"/> beeper(s)'+
+      '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.selectedBeepersSet();">Set</button>'+
+      '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.selectedBeepersSetZero();">=0</button>'+
+      '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.selectedBeepersDecrement();">-1</button>'+
+      '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.selectedBeepersIncrement();">+1</button><br/>'+
+      '<br/>'+
+      '<button type="button" onclick="'+this.$name()+'.putKarelOnSelectedField();">Put Karel on selected field</button><br/>'+
+      'Karel at (<span id="'+this.$name()+'_karel_x" class="world_view_data"></span>,<span id="'+this.$name()+'_karel_y" class="world_view_data"></span>) '+
+      'have <input type="text" id="'+this.$name()+'_karel_beepers" class="world_view_input" onchange="'+this.$name()+'.karelBeepersSet();"/> beeper(s)'+
+      '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.karelBeepersSet();">Set</button>'+
+      '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.karelBeepersSetZero();">=0</button>'+
+      '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.karelBeepersDecrement();">-1</button>'+
+      '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.karelBeepersIncrement();">+1</button><br/>'+
+      '<br/>'+
+      'X: <input type="text" id="'+this.$name()+'_dimensionX" class="world_view_input" onchange="'+this.$name()+'.changeDimensions();"/>'+
+      'Y: <input type="text" id="'+this.$name()+'_dimensionY" class="world_view_input" onchange="'+this.$name()+'.changeDimensions();"/>'+
+      '<button type="button" onclick="'+this.$name()+'.changeDimensions();">Change dimensions</button>&nbsp;&nbsp;'+
+      '<button type="button" onclick="'+this.$name()+'.resetWorld();">Reset world</button><br/>'+
+      '<br/>'+
+      '<button type="button" onclick="'+this.$name()+'.storeWorld();">Store world to memory</button>&nbsp;&nbsp;'+
+      '<button type="button" onclick="'+this.$name()+'.restoreWorld();">Restore world from memory</button>'+
+      '</div>';
+    this.canvas = document.getElementById(this.$name()+'_canvas');
+    this.canvasContext = this.canvas.getContext('2d');
+    this.canvas.addEventListener
     (
-      function(that)
-      {
-        return function(event)
+      'click',
+      (
+        function(that)
         {
-          var point = that.clickPoint(event);
-          that.handleClick(point.x, that.canvas.height-1-point.y, 'left');
-          return false;
-        };
-      }
-    )(this),
-    false
-  );
-  this.canvas.addEventListener
-  (
-    'contextmenu',
+          return function(event)
+          {
+            var point = that.clickPoint(event);
+            that.handleClick(point.x, that.canvas.height-1-point.y, 'left');
+            return false;
+          };
+        }
+      )(this),
+      false
+    );
+    this.canvas.addEventListener
     (
-      function(that)
-      {
-        return function(event)
+      'contextmenu',
+      (
+        function(that)
         {
-          var point = that.clickPoint(event);
-          that.handleClick(point.x, that.canvas.height-1-point.y, 'right');
-          event.preventDefault();
-          return false;
-        };
-      }
-    )(this),
-    false
-  );
-  this.canvas.addEventListener
-  (
-    'wheel',
+          return function(event)
+          {
+            var point = that.clickPoint(event);
+            that.handleClick(point.x, that.canvas.height-1-point.y, 'right');
+            event.preventDefault();
+            return false;
+          };
+        }
+      )(this),
+      false
+    );
+    this.canvas.addEventListener
     (
-      function(that)
-      {
-        return function(event)
+      'wheel',
+      (
+        function(that)
         {
-          var point = that.clickPoint(event);
-          if(event.deltaY < 0)
-            that.handleClick(point.x, that.canvas.height-1-point.y, 'wheelUp');
-          else if(event.deltaY > 0)
-            that.handleClick(point.x, that.canvas.height-1-point.y, 'wheelDown');
-          event.preventDefault();
-          return false;
-        };
-      }
-    )(this),
-    false
-  );
-  this.canvas.addEventListener
-  (
-    'dblclick',
+          return function(event)
+          {
+            var point = that.clickPoint(event);
+            if(event.deltaY < 0)
+              that.handleClick(point.x, that.canvas.height-1-point.y, 'wheelUp');
+            else if(event.deltaY > 0)
+              that.handleClick(point.x, that.canvas.height-1-point.y, 'wheelDown');
+            event.preventDefault();
+            return false;
+          };
+        }
+      )(this),
+      false
+    );
+    this.canvas.addEventListener
     (
-      function(that)
-      {
-        return function(event)
+      'dblclick',
+      (
+        function(that)
         {
-          var point = that.clickPoint(event);
-          that.handleClick(point.x, that.canvas.height-1-point.y, 'double');
-          event.preventDefault();
-          return false;
-        };
-      }
-    )(this),
-    false
-  );
+          return function(event)
+          {
+            var point = that.clickPoint(event);
+            that.handleClick(point.x, that.canvas.height-1-point.y, 'double');
+            event.preventDefault();
+            return false;
+          };
+        }
+      )(this),
+      false
+    );
+  };
+
+  this.initCanvas = function()
+  {
+    this.selectedX = 0;
+    this.selectedY = 0;
+    this.fieldsWidth = this.wallAddendum+this.world.dimensionX*this.periodicSize+this.lineWidth+this.wallAddendum;
+    this.fieldsHeight = this.wallAddendum+this.world.dimensionY*this.periodicSize+this.lineWidth+this.wallAddendum;
+    this.canvas.width = this.fieldsWidth;
+    this.canvas.height = this.fieldsHeight;
+  };
 
   this.clickPoint = function(event)
   {
@@ -252,55 +305,6 @@ function WorldViewClass(status, world, controllerID, canvasID)
       }
       this.draw();
     }
-  };
-
-  this.initCanvas = function()
-  {
-    this.selectedX = 0;
-    this.selectedY = 0;
-    this.fieldsWidth = this.wallAddendum+this.world.dimensionX*this.periodicSize+this.lineWidth+this.wallAddendum;
-    this.fieldsHeight = this.wallAddendum+this.world.dimensionY*this.periodicSize+this.lineWidth+this.wallAddendum;
-    this.canvas.width = this.fieldsWidth;
-    this.canvas.height = this.fieldsHeight;
-  };
-
-  this.initController = function()
-  {
-    this.controller.innerHTML =
-      '<table class="border_collapse"><tr>'+
-      '<td class="world_view_info">NORTH: <span id="'+this.$name()+'_north" class="world_view_test"></span></td>'+
-      '<td class="world_view_info">WALL: <span id="'+this.$name()+'_wall" class="world_view_test"></span></td>'+
-      '<td class="world_view_info">HAVE: <span id="'+this.$name()+'_have" class="world_view_test"></span></td>'+
-      '<td class="world_view_info">FIND: <span id="'+this.$name()+'_find" class="world_view_test"></span></td>'+
-      '</tr><tr>'+
-      '<td><button type="button" class="world_view_button_command" onclick="'+this.$name()+'.doLeft();">LEFT</button></td>'+
-      '<td><button type="button" class="world_view_button_command" onclick="'+this.$name()+'.doMove();">MOVE</button></td>'+
-      '<td><button type="button" class="world_view_button_command" onclick="'+this.$name()+'.doPut();">PUT</button></td>'+
-      '<td><button type="button" class="world_view_button_command" onclick="'+this.$name()+'.doTake();">TAKE</button></td>'+
-      '</tr></table><br/>'+
-      '<button type="button" onclick="'+this.$name()+'.selectKarelField();">Select Karel field</button><br/>'+
-      'Selected field at (<span id="'+this.$name()+'_selected_x" class="world_view_data"></span>,<span id="'+this.$name()+'_selected_y" class="world_view_data"></span>) '+
-      'have <input type="text" id="'+this.$name()+'_selected_beepers" class="world_view_input" onchange="'+this.$name()+'.selectedBeepersSet();"/> beeper(s)'+
-      '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.selectedBeepersSet();">Set</button>'+
-      '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.selectedBeepersSetZero();">=0</button>'+
-      '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.selectedBeepersDecrement();">-1</button>'+
-      '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.selectedBeepersIncrement();">+1</button><br/>'+
-      '<br/>'+
-      '<button type="button" onclick="'+this.$name()+'.putKarelOnSelectedField();">Put Karel on selected field</button><br/>'+
-      'Karel at (<span id="'+this.$name()+'_karel_x" class="world_view_data"></span>,<span id="'+this.$name()+'_karel_y" class="world_view_data"></span>) '+
-      'have <input type="text" id="'+this.$name()+'_karel_beepers" class="world_view_input" onchange="'+this.$name()+'.karelBeepersSet();"/> beeper(s)'+
-      '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.karelBeepersSet();">Set</button>'+
-      '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.karelBeepersSetZero();">=0</button>'+
-      '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.karelBeepersDecrement();">-1</button>'+
-      '<button type="button" class="world_view_button_set" onclick="'+this.$name()+'.karelBeepersIncrement();">+1</button><br/>'+
-      '<br/>'+
-      'X: <input type="text" id="'+this.$name()+'_dimensionX" class="world_view_input" onchange="'+this.$name()+'.changeDimensions();"/>'+
-      'Y: <input type="text" id="'+this.$name()+'_dimensionY" class="world_view_input" onchange="'+this.$name()+'.changeDimensions();"/>'+
-      '<button type="button" onclick="'+this.$name()+'.changeDimensions();">Change dimensions</button>&nbsp;&nbsp;'+
-      '<button type="button" onclick="'+this.$name()+'.resetWorld();">Reset world</button><br/>'+
-      '<br/>'+
-      '<button type="button" onclick="'+this.$name()+'.storeWorld();">Store world to memory</button>&nbsp;&nbsp;'+
-      '<button type="button" onclick="'+this.$name()+'.restoreWorld();">Restore world from memory</button>&nbsp;&nbsp;';
   };
 
   this.drawController = function()
@@ -691,7 +695,7 @@ function WorldViewClass(status, world, controllerID, canvasID)
     this.draw();
   };
 
+  this.init();
   this.initCanvas();
-  this.initController();
   this.draw();
 }

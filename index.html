@@ -51,7 +51,7 @@
       C variant of <a href="https://en.wikipedia.org/wiki/Karel_(programming_language)" class="link">Karel programming language</a><br/>
       by Goran "<a href="http://www.chupcko.org/" class="link">CHUPCKO</a>" Lazi&#x0107;
       <p/>
-      Version: <b>0.3.4b</b> 2016-10-30
+      Version: <b>0.4</b> 2016-10-31
       <p/>
       1. Go to "File" tab<br/>
       2. Click on "Get program and world" of some example from list<br/>
@@ -67,52 +67,7 @@
       <a href="https://github.com/chupcko/karel" class="link">Source</a>
     </div>
     <div id="tab_settings" class="tab_content"></div>
-    <div id="tab_file" class="tab_content">
-      <button type="button" class="file_view_button" onclick="loadProgram();">Load program</button><input type="file" id="program_file"/><br/>
-      <button type="button" class="file_view_button" onclick="loadWorld();">Load world</button><input type="file" id="world_file"/><br/>
-      <button type="button" class="file_view_button" onclick="saveProgram();">Save program</button><input type="text" id="program_file_name" value="name.kp"/><br/>
-      <button type="button" class="file_view_button" onclick="saveWorld();">Save world</button><input type="text" id="world_file_name" value="name.kw"/><br/>
-      <p/>
-      Examples:
-      <table class="border_collapse">
-        <tr>
-          <td>go_home</td>
-          <td><button type="button" onclick="getProgram('go_home');">Get program</button></td>
-          <td><button type="button" onclick="getWorld('go_home');">Get world</button></td>
-          <td><button type="button" onclick="getBoth('go_home');">Get program and world</button></td>
-        </tr>
-        <tr>
-          <td>take_all_beeperes</td>
-          <td><button type="button" onclick="getProgram('take_all_beeperes');">Get program</button></td>
-          <td><button type="button" onclick="getWorld('take_all_beeperes');">Get world</button></td>
-          <td><button type="button" onclick="getBoth('take_all_beeperes');">Get program and world</button></td>
-        </tr>
-        <tr>
-          <td>fill</td>
-          <td><button type="button" onclick="getProgram('fill');">Get program</button></td>
-          <td><button type="button" onclick="getWorld('fill');">Get world</button></td>
-          <td><button type="button" onclick="getBoth('fill');">Get program and world</button></td>
-        </tr>
-        <tr>
-          <td>spiral</td>
-          <td><button type="button" onclick="getProgram('spiral');">Get program</button></td>
-          <td><button type="button" onclick="getWorld('spiral');">Get world</button></td>
-          <td><button type="button" onclick="getBoth('spiral');">Get program and world</button></td>
-        </tr>
-        <tr>
-          <td>labyrinth</td>
-          <td><button type="button" onclick="getProgram('labyrinth');">Get program</button></td>
-          <td><button type="button" onclick="getWorld('labyrinth');">Get world</button></td>
-          <td><button type="button" onclick="getBoth('labyrinth');">Get program and world</button></td>
-        </tr>
-        <tr>
-          <td>sort</td>
-          <td><button type="button" onclick="getProgram('sort');">Get program</button></td>
-          <td><button type="button" onclick="getWorld('sort');">Get world</button></td>
-          <td><button type="button" onclick="getBoth('sort');">Get program and world</button></td>
-        </tr>
-      </table>
-    </div>
+    <div id="tab_file" class="tab_content"></div>
     <div id="tab_program" class="tab_content">
       <button type="button" onclick="File.compile();">Compile</button><br/>
       <textarea rows="40" cols="120" id="program">
@@ -121,10 +76,7 @@ main()
 }
 </textarea>
     </div>
-    <div id="tab_world" class="tab_content overflow">
-      <div class="left_div"><canvas id="world_canvas"></canvas></div>
-      <div id="world_controller" class="left_div"></div>
-    </div>
+    <div id="tab_world" class="tab_content"></div>
     <div id="tab_machine" class="tab_content"></div>
   </body>
 </html>
