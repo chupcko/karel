@@ -314,7 +314,7 @@ function CompilerClass(machine)
     return true;
   };
 
-  this.parserPrimitive = function()
+  this.parserCommand = function()
   {
     switch(this.lexeme)
     {
@@ -404,7 +404,7 @@ function CompilerClass(machine)
       case this.LexemeContinue:
       case this.LexemeReturn:
       case this.LexemeStop:
-        result = this.parserPrimitive();
+        result = this.parserCommand();
         if(result !== true)
           return result;
         if(this.lexeme != this.LexemeSemicolon)
@@ -511,8 +511,11 @@ function CompilerClass(machine)
     return true;
   };
 
-  this.parserList = function()
+  this.parserBlock = function()
   {
+    if(this.lexeme != this.LexemeLeftBraces)
+      return this.makeResult(this.ResultExceptedLeftBraces);
+    this.loadLexeme();
     while
     (
       this.lexeme == this.LexemeLeftBraces ||
@@ -538,41 +541,39 @@ function CompilerClass(machine)
     }
     if(this.lexeme != this.LexemeRightBraces)
       return this.makeResult(this.ResultExceptedRightBraces);
+    this.loadLexeme();
     return true;
   };
 
-  this.parserBlock = function()
+  this.parserFunction = function()
   {
-    if(this.lexeme != this.LexemeLeftBraces)
-      return this.makeResult(this.ResultExceptedLeftBraces);
+    if(this.lexeme != this.LexemeName)
+      return this.makeResult(this.ResultExceptedFucntionName);
+    if(this.addToFunctionAddressTable(this.lexemeValue, this.address))
+      return this.makeResult(this.ResultExceptedAlreadyDefinedFunction.replace('{}', this.lexemeValue));
     this.loadLexeme();
-    var result = this.parserList();
+    if(this.lexeme != this.LexemeLeftParenthesesns)
+      return this.makeResult(this.ResultExceptedLeftParentheses);
+    this.loadLexeme();
+    if(this.lexeme != this.LexemeRightParenthesesrens)
+      return this.makeResult(this.ResultExceptedRightParentheses);
+    this.loadLexeme();
+    var result = this.parserBlock();
     if(result !== true)
       return result;
-    if(this.lexeme != this.LexemeRightBraces)
-      return this.makeResult(this.ResultExceptedRightBraces);
-    this.loadLexeme();
+    this.addToCode(this.machine.CodeRet);
     return true;
   };
 
   this.parserProgram = function()
   {
-    while(this.lexeme == this.LexemeName)
+    do
     {
-      if(this.addToFunctionAddressTable(this.lexemeValue, this.address))
-        return this.makeResult(this.ResultExceptedAlreadyDefinedFunction.replace('{}', this.lexemeValue));
-      this.loadLexeme();
-      if(this.lexeme != this.LexemeLeftParenthesesns)
-        return this.makeResult(this.ResultExceptedLeftParentheses);
-      this.loadLexeme();
-      if(this.lexeme != this.LexemeRightParenthesesrens)
-        return this.makeResult(this.ResultExceptedRightParentheses);
-      this.loadLexeme();
-      var result = this.parserBlock();
+      var result = this.parserFunction();
       if(result !== true)
         return result;
-      this.addToCode(this.machine.CodeRet);
     }
+    while(this.lexeme == this.LexemeName);
     if(this.lexeme != this.LexemeEnd)
       return this.makeResult(this.ResultExceptedFucntionName);
     return true;

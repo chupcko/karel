@@ -1,15 +1,13 @@
-<program>   ::= name left_parentheses right_parentheses <block> <program>
-              |
+<program>   ::= <function> +
               .
 
-<block>     ::= left_braces <list> right_braces
+<function>  ::= name left_parentheses right_parentheses <block>
               .
 
-<list>      ::= <statment> <list>
-              |
+<block>     ::= left_braces <statment> * right_braces
               .
 
-<statment>  ::= <primitive> semicolon
+<statment>  ::= <command> semicolon
               | if left_parentheses <condition> right_parentheses <statment> <else>
               | while left_parentheses <condition> right_parentheses <statment>
               | loop <statment>
@@ -17,7 +15,7 @@
               | <block>
               .
 
-<primitive> ::= left
+<command>   ::= left
               | move
               | put
               | take
@@ -29,11 +27,11 @@
               |
               .
 
-<condition> ::= exclamation_mark <condition>
-              | find
-              | have
-              | north
-              | wall
+<condition> ::= exclamation_mark * ( find
+                                   | have
+                                   | north
+                                   | wall
+                                   )
               .
 
 <else>      ::= else <statment>
