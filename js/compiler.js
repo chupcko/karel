@@ -204,7 +204,7 @@ function CompilerClass(machine)
         this.nextTextPosition();
       }
     }
-    else if(this.text.charAt(this.textPosition).match(/^[a-zA-Z_]$/))
+    else if(this.text.charAt(this.textPosition).match(/^[a-zA-Z_$]$/))
     {
       this.lexeme = this.LexemeName;
       this.lexemeValue = this.text.charAt(this.textPosition);
@@ -212,7 +212,7 @@ function CompilerClass(machine)
       while
       (
         this.textPosition < this.text.length &&
-        this.text.charAt(this.textPosition).match(/^[a-zA-Z0-9_]$/)
+        this.text.charAt(this.textPosition).match(/^[a-zA-Z0-9_$]$/)
       )
       {
         this.lexemeValue += this.text.charAt(this.textPosition);
@@ -232,44 +232,6 @@ function CompilerClass(machine)
     return result+' at '+this.lexemeLine+':'+this.lexemeColumn;
   };
 
-  this.parserElse = function(elseAddress)
-  {
-    switch(this.lexeme)
-    {
-      case this.LexemeElse:
-        this.addToCode(this.machine.CodeJump);
-        var toOutAddress = this.addToCode(-1);
-        this.code[elseAddress] = this.address;
-        this.loadLexeme();
-        var result = this.parserStatment();
-        if(result !== true)
-          return result;
-        this.code[toOutAddress] = this.address;
-        break;
-      case this.LexemeLeftBraces:
-      case this.LexemeRightBraces:
-      case this.LexemeSemicolon:
-      case this.LexemeName:
-      case this.LexemeBreak:
-      case this.LexemeContinue:
-      case this.LexemeIf:
-      case this.LexemeLeft:
-      case this.LexemeLoop:
-      case this.LexemeMove:
-      case this.LexemePut:
-      case this.LexemeRepeat:
-      case this.LexemeReturn:
-      case this.LexemeStop:
-      case this.LexemeTake:
-      case this.LexemeWhile:
-        this.code[elseAddress] = this.address;
-        break;
-      default:
-        return this.makeResult(this.ResultExceptedElseOrCommand);
-    }
-    return true;
-  };
-
   this.parserCondition = function()
   {
     var flag = false;
@@ -280,20 +242,6 @@ function CompilerClass(machine)
     }
     switch(this.lexeme)
     {
-      case this.LexemeFind:
-        if(flag)
-          this.addToCode(this.machine.CodeBf);
-        else
-          this.addToCode(this.machine.CodeBnf);
-        this.loadLexeme();
-        break;
-      case this.LexemeHave:
-        if(flag)
-          this.addToCode(this.machine.CodeBh);
-        else
-          this.addToCode(this.machine.CodeBnh);
-        this.loadLexeme();
-        break;
       case this.LexemeNorth:
         if(flag)
           this.addToCode(this.machine.CodeBn);
@@ -306,6 +254,20 @@ function CompilerClass(machine)
           this.addToCode(this.machine.CodeBw);
         else
           this.addToCode(this.machine.CodeBnw);
+        this.loadLexeme();
+        break;
+      case this.LexemeHave:
+        if(flag)
+          this.addToCode(this.machine.CodeBh);
+        else
+          this.addToCode(this.machine.CodeBnh);
+        this.loadLexeme();
+        break;
+      case this.LexemeFind:
+        if(flag)
+          this.addToCode(this.machine.CodeBf);
+        else
+          this.addToCode(this.machine.CodeBnf);
         this.loadLexeme();
         break;
       default:
@@ -392,6 +354,9 @@ function CompilerClass(machine)
   this.parserStatment = function()
   {
     var result;
+    var loopAddress;
+    var toOutAddress;
+    var loopInfoTop;
     switch(this.lexeme)
     {
       case this.LexemeSemicolon:
@@ -426,12 +391,42 @@ function CompilerClass(machine)
         result = this.parserStatment();
         if(result !== true)
           return result;
-        result = this.parserElse(elseAddress);
-        if(result !== true)
-          return result;
+        switch(this.lexeme)
+        {
+          case this.LexemeElse:
+            this.addToCode(this.machine.CodeJump);
+            toOutAddress = this.addToCode(-1);
+            this.code[elseAddress] = this.address;
+            this.loadLexeme();
+            result = this.parserStatment();
+            if(result !== true)
+              return result;
+            this.code[toOutAddress] = this.address;
+            break;
+          case this.LexemeLeftBraces:
+          case this.LexemeRightBraces:
+          case this.LexemeSemicolon:
+          case this.LexemeName:
+          case this.LexemeBreak:
+          case this.LexemeContinue:
+          case this.LexemeIf:
+          case this.LexemeLeft:
+          case this.LexemeLoop:
+          case this.LexemeMove:
+          case this.LexemePut:
+          case this.LexemeRepeat:
+          case this.LexemeReturn:
+          case this.LexemeStop:
+          case this.LexemeTake:
+          case this.LexemeWhile:
+            this.code[elseAddress] = this.address;
+            break;
+          default:
+            return this.makeResult(this.ResultExceptedElseOrCommand);
+        }
         break;
       case this.LexemeWhile:
-        var loopAddress = this.address;
+        loopAddress = this.address;
         this.loadLexeme();
         if(this.lexeme != this.LexemeLeftParenthesesns)
           return this.makeResult(this.ResultExceptedLeftParentheses);
@@ -441,7 +436,7 @@ function CompilerClass(machine)
           return result;
         if(this.lexeme != this.LexemeRightParenthesesrens)
           return this.makeResult(this.ResultExceptedRightParentheses);
-        var toOutAddress = this.addToCode(-1);
+        toOutAddress = this.addToCode(-1);
         this.addToLoopInfo(this.LoopTypeWhile);
         this.loadLexeme();
         result = this.parserStatment();
@@ -450,14 +445,14 @@ function CompilerClass(machine)
         this.addToCode(this.machine.CodeJump);
         this.addToCode(loopAddress);
         this.code[toOutAddress] = this.address;
-        var loopInfoTop = this.loopInfo.pop();
+        loopInfoTop = this.loopInfo.pop();
         for(var i = 0; i < loopInfoTop.breakAddress.length; i++)
           this.code[loopInfoTop.breakAddress[i]] = this.address;
         for(var i = 0; i < loopInfoTop.continueAddress.length; i++)
           this.code[loopInfoTop.continueAddress[i]] = loopAddress;
         break;
       case this.LexemeLoop:
-        var loopAddress = this.address;
+        loopAddress = this.address;
         this.addToLoopInfo(this.LoopTypeLoop);
         this.loadLexeme();
         result = this.parserStatment();
@@ -465,7 +460,7 @@ function CompilerClass(machine)
           return result;
         this.addToCode(this.machine.CodeJump);
         this.addToCode(loopAddress);
-        var loopInfoTop = this.loopInfo.pop();
+        loopInfoTop = this.loopInfo.pop();
         for(var i = 0; i < loopInfoTop.breakAddress.length; i++)
           this.code[loopInfoTop.breakAddress[i]] = this.address;
         for(var i = 0; i < loopInfoTop.continueAddress.length; i++)
@@ -486,7 +481,7 @@ function CompilerClass(machine)
         this.loadLexeme();
         if(this.lexeme != this.LexemeRightParenthesesrens)
           return this.makeResult(this.ResultExceptedRightParentheses);
-        var loopAddress = this.address;
+        loopAddress = this.address;
         this.addToLoopInfo(this.LoopTypeRepeat);
         this.loadLexeme();
         result = this.parserStatment();
@@ -494,7 +489,7 @@ function CompilerClass(machine)
           return result;
         var continueAddress = this.addToCode(this.machine.CodeNext);
         this.addToCode(loopAddress);
-        var loopInfoTop = this.loopInfo.pop();
+        loopInfoTop = this.loopInfo.pop();
         for(var i = 0; i < loopInfoTop.breakAddress.length; i++)
           this.code[loopInfoTop.breakAddress[i]] = this.address;
         for(var i = 0; i < loopInfoTop.continueAddress.length; i++)

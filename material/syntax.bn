@@ -1,14 +1,11 @@
-<program>   ::= <function> +
-              .
+<program>   ::= <function> + .
 
-<function>  ::= name left_parentheses right_parentheses <block>
-              .
+<function>  ::= name left_parentheses right_parentheses <block> .
 
-<block>     ::= left_braces <statment> * right_braces
-              .
+<block>     ::= left_braces <statment> * right_braces .
 
 <statment>  ::= <command> semicolon
-              | if left_parentheses <condition> right_parentheses <statment> <else>
+              | if left_parentheses <condition> right_parentheses <statment> ( else <statment> ) ?
               | while left_parentheses <condition> right_parentheses <statment>
               | loop <statment>
               | repeat left_parentheses number right_parentheses <statment>
@@ -27,13 +24,8 @@
               |
               .
 
-<condition> ::= exclamation_mark * ( find
-                                   | have
-                                   | north
+<condition> ::= exclamation_mark * ( north
                                    | wall
-                                   )
-              .
-
-<else>      ::= else <statment>
-              |
-              .
+                                   | have
+                                   | find
+                                   ) .
