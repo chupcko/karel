@@ -47,7 +47,7 @@ function FileViewClass(status, file, containerID)
   this.loadProgram = function()
   {
     var files = document.getElementById(this.$name()+'_program_file').files;
-    if(files.length != 1)
+    if(files.length < 1)
     {
       this.status.setError('First select program file');
       return;
@@ -60,7 +60,7 @@ function FileViewClass(status, file, containerID)
   this.loadWorld = function()
   {
     var files = document.getElementById(this.$name()+'_world_file').files;
-    if(files.length != 1)
+    if(files.length < 1)
     {
       this.status.setError('First select world file');
       return;

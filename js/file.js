@@ -11,9 +11,14 @@ function FileClass(status, programID, world, machine, compiler, worldView, machi
   this.load = function(files, callback)
   {
     this.status.clear();
-    if(files.length != 1)
+    if(files.length < 1)
     {
       this.status.setError('First select file');
+      return;
+    }
+    if(files.length > 1)
+    {
+      this.status.setError('Select only one file');
       return;
     }
     var reader = new FileReader();
