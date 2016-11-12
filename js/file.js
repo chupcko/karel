@@ -52,7 +52,7 @@ function FileClass(status, programID, world, machine, compiler, worldView, machi
   this.save = function(name, content)
   {
     this.status.clear();
-    var blob= new Blob([content], {type:'text/plain'});
+    var blob= new Blob([ content ], { type: 'text/plain' });
     var download = document.createElement('a');
     download.download = name;
     download.innerHTML = '';
