@@ -209,7 +209,6 @@ function WorldViewClass(status, world, containerID)
 
   this.handleClick = function(x, y, type)
   {
-    var box;
     var box = this.findClickBox
     (
       x,
