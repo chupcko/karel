@@ -157,8 +157,8 @@ function WorldViewClass(status, world, containerID)
 
   this.clickPoint = function(event)
   {
-    var x = undefined;
-    var y = undefined;
+    var x;
+    var y;
     if
     (
       event.pageX !== undefined &&
@@ -173,15 +173,13 @@ function WorldViewClass(status, world, containerID)
       x = event.clientX+document.body.scrollLeft+document.documentElement.scrollLeft;
       y = event.clientY+document.body.scrollTop+document.documentElement.scrollTop;
     }
-    x -= this.canvas.offsetLeft;
-    y -= this.canvas.offsetTop;
     return {
-      x: x,
-      y: y
+      x: x-this.canvas.offsetLeft,
+      y: y-this.canvas.offsetTop
     };
   };
 
-  this.findClickBox = function(x, y, offsetX, offsetY, sizeX, sizeY, periodicX, periodicY)
+  this.findPeriodicBox = function(x, y, offsetX, offsetY, sizeX, sizeY, periodicX, periodicY)
   {
     if
     (
@@ -209,7 +207,7 @@ function WorldViewClass(status, world, containerID)
 
   this.handleClick = function(x, y, type)
   {
-    var box = this.findClickBox
+    var box = this.findPeriodicBox
     (
       x,
       y,
@@ -225,7 +223,7 @@ function WorldViewClass(status, world, containerID)
       this.world.toggleWallOnNorth(box.x, box.y);
       this.draw();
     }
-    box = this.findClickBox
+    box = this.findPeriodicBox
     (
       x,
       y,
@@ -241,7 +239,7 @@ function WorldViewClass(status, world, containerID)
       this.world.toggleWallOnEast(box.x, box.y);
       this.draw();
     }
-    box = this.findClickBox
+    box = this.findPeriodicBox
     (
       x,
       y,
