@@ -133,8 +133,10 @@ function FileClass(status, programID, world, machine, compiler, worldView, machi
         var result = that.world.load(data);
         if(result !== true)
           return 'Bad world file format: '+result;
-        that.worldView.initCanvas();
-        that.worldView.draw();
+        that.worldView.set();
+        that.worldView.drawWalls();
+        that.worldView.drawWorld();
+        that.worldView.drawController();
         return true;
       }
     }

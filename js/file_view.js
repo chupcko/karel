@@ -26,7 +26,7 @@ function FileViewClass(status, file, containerID)
       '<button type="button" class="file_view_button" onclick="'+this.$name()+'.saveWorld();">Save world</button><input type="text" id="'+this.$name()+'_world_file_name"/><br/>'+
       '<p/>'+
       'Examples:'+
-      '<table class="border_collapse">';
+      '<table style="border-collapse: collapse;">';
     for(var i = 0; i < this.examples.length; i++)
       text +=
         '<tr><td>'+this.examples[i]+'</td>'+
